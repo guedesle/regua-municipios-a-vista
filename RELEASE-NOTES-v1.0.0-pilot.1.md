@@ -26,7 +26,7 @@ O `.sha256` é obrigatório para verificar a integridade do instalador.
 ## Instalação resumida
 
 1. baixe os dois arquivos;
-2. valide o SHA-256 conforme o [guia de instalação](docs/01-GUIA-DE-INSTALACAO.md);
+2. valide o SHA-256 conforme o [guia de instalação](https://github.com/guedesle/regua-municipios-a-vista/blob/main/docs/01-GUIA-DE-INSTALACAO.md);
 3. feche completamente o Chrome;
 4. execute o instalador como administrador;
 5. reabra o Chrome;
@@ -88,4 +88,4 @@ Programa auxiliar: com.egba.regua_editorial.helper
 
 Esta é uma **pré-release de piloto**. A ampliação depende da homologação funcional pela GERDO, da validação técnica pela TI e do registro das pendências conhecidas.
 
-Consulte o [README](README.md), o [guia de instalação](docs/01-GUIA-DE-INSTALACAO.md) e o [guia rápido de uso](docs/08-GUIA-RAPIDO-DE-USO.md).
+Consulte o [README](https://github.com/guedesle/regua-municipios-a-vista), o [guia de instalação](https://github.com/guedesle/regua-municipios-a-vista/blob/main/docs/01-GUIA-DE-INSTALACAO.md) e o [guia rápido de uso](https://github.com/guedesle/regua-municipios-a-vista/blob/main/docs/08-GUIA-RAPIDO-DE-USO.md).
