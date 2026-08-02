@@ -103,6 +103,7 @@ Use o [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md) para registrar o a
 | entender a distribuição | [Arquitetura de distribuição](docs/05-ARQUITETURA-DE-DISTRIBUICAO.md) |
 | conferir a prontidão | [Checklist de entrega](docs/06-CHECKLIST-DE-ENTREGA.md) |
 | consultar versões e ativos | [Inventário da Release](docs/07-INVENTARIO-DA-RELEASE.md) |
+| consultar o resultado da revisão documental | [Relatório de QA](docs/10-RELATORIO-QA-DOCUMENTACAO.md) |
 
 ## Suporte rápido
 
