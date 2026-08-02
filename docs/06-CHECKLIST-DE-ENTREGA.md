@@ -1,78 +1,107 @@
 # Checklist de entrega — Entrega 1
 
-## Identificação
+Use este checklist para registrar a publicação, a instalação, a homologação e a orientação ao usuário.
 
-- [ ] Setup `1.0.0`;
+## 1. Publicação da Release
+
+- [ ] Release privada `v1.0.0-pilot.1` publicada;
+- [ ] `ReguaEditorial-Entrega1-Setup-x64.exe` anexado;
+- [ ] `ReguaEditorial-Entrega1-Setup-x64.exe.sha256` anexado;
+- [ ] SHA-256 conferido depois de baixar novamente os arquivos;
+- [ ] tamanho e hash registrados no inventário;
+- [ ] instalador não foi commitado na árvore Git;
+- [ ] chave privada ausente do repositório e da Release;
+- [ ] pacote anterior preservado para recuperação;
+- [ ] responsável e data da publicação registrados.
+
+## 2. Identificação da versão
+
+- [ ] instalador `1.0.0`;
 - [ ] extensão `0.7.3`;
-- [ ] Helper `0.1.4`;
-- [ ] contrato `1.2.0`;
-- [ ] Extension ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
-- [ ] canal `pilot`;
-- [ ] data e responsável pela publicação registrados.
+- [ ] programa auxiliar `0.1.4`;
+- [ ] comunicação local `1.2.0`;
+- [ ] ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
+- [ ] canal `pilot`.
 
-## Pacote
-
-- [ ] `ReguaEditorial-Entrega1-Setup-x64.exe` publicado na Release;
-- [ ] `.sha256` publicado na mesma Release;
-- [ ] hash recalculado e conferido após upload;
-- [ ] executável não foi commitado na árvore Git;
-- [ ] PEM ausente do repositório e da Release;
-- [ ] pacote anterior preservado para rollback.
-
-## Estação
+## 3. Preparação da estação
 
 - [ ] Windows x64;
-- [ ] Chrome instalado;
-- [ ] `PartOfDomain = true`;
+- [ ] Google Chrome instalado;
+- [ ] estação vinculada ao domínio corporativo;
 - [ ] credencial administrativa disponível;
-- [ ] Word identificado quando DOC/RTF fizerem parte do escopo.
+- [ ] perfil do Chrome que será usado pelo operador identificado;
+- [ ] Word instalado quando DOC ou RTF fizerem parte do uso previsto;
+- [ ] dados ou versão anterior avaliados antes da instalação.
 
-## Instalação
+## 4. Instalação
 
-- [ ] Setup executado como administrador;
-- [ ] Helper instalado em `%ProgramFiles%`;
-- [ ] Native Messaging Host registrado;
-- [ ] cache da extensão criado em `%ProgramData%`;
-- [ ] políticas do Chrome aplicadas;
-- [ ] Chrome fechado e reaberto;
-- [ ] extensão gerenciada visível;
-- [ ] versão e Extension ID conferidos.
+- [ ] SHA-256 validado na estação;
+- [ ] aviso de certificado temporário comunicado à TI;
+- [ ] Chrome completamente fechado;
+- [ ] instalador executado como administrador;
+- [ ] instalação concluída sem erro;
+- [ ] políticas recarregadas em `chrome://policy`;
+- [ ] extensão visível em `chrome://extensions`;
+- [ ] nome, versão e ID conferidos;
+- [ ] extensão indicada como gerenciada pela organização;
+- [ ] diagnóstico do programa auxiliar aprovado.
 
-## Homologação funcional
+## 5. Teste funcional
 
-- [ ] DOCX aprovado;
-- [ ] DOC aprovado quando houver Word;
-- [ ] RTF aprovado quando houver Word;
-- [ ] medição aprovada;
-- [ ] cálculo aprovado;
-- [ ] salvamento e recuperação aprovados;
-- [ ] relatório diário aprovado;
-- [ ] relatório por intervalo aprovado;
-- [ ] exportação JSON aprovada;
-- [ ] exportação CSV aprovada;
-- [ ] persistência após reinício do Chrome aprovada.
+- [ ] matéria de teste identificada corretamente;
+- [ ] DOCX processado;
+- [ ] prévia conferida;
+- [ ] medição conferida;
+- [ ] preço conferido;
+- [ ] cálculo salvo e localizado;
+- [ ] relatório por data gerado;
+- [ ] relatório por intervalo gerado;
+- [ ] CSV exportado e aberto em planilha;
+- [ ] JSON exportado e validado;
+- [ ] registros preservados após fechar e reabrir o Chrome;
+- [ ] DOC testado quando aplicável;
+- [ ] RTF testado quando aplicável.
 
-## Manutenção
+## 6. Manutenção
 
-- [ ] reparo idempotente aprovado;
-- [ ] remoção padrão preserva extensão e dados;
-- [ ] rollback técnico documentado;
+- [ ] reparo testado sem trocar o ID da extensão;
+- [ ] reparo preservou os cálculos locais;
+- [ ] remoção padrão retirou o programa auxiliar e preservou extensão e dados;
+- [ ] procedimento de remoção integral conhecido;
+- [ ] plano de reversão disponível;
+- [ ] pacote anterior disponível;
 - [ ] responsável pelo suporte definido;
-- [ ] logs sanitizados disponíveis;
-- [ ] critérios de suspensão conhecidos.
+- [ ] local dos logs conhecido pela TI.
 
-## Segurança
+## 7. Orientação ao usuário
+
+- [ ] usuário recebeu o [Guia rápido de uso](08-GUIA-RAPIDO-DE-USO.md);
+- [ ] usuário sabe abrir a matéria antes da extensão;
+- [ ] usuário sabe diferenciar os fluxos DOCX, DOC e RTF;
+- [ ] usuário sabe revisar prévia, medição e valor;
+- [ ] usuário sabe consultar cálculos e emitir relatórios;
+- [ ] usuário foi orientado a usar o mesmo perfil do Chrome;
+- [ ] usuário foi orientado a não limpar dados do navegador;
+- [ ] usuário sabe quais informações registrar em caso de falha.
+
+## 8. Segurança
 
 - [ ] acesso ao repositório restrito;
 - [ ] Release privada;
-- [ ] nenhuma credencial, token ou cookie anexado;
-- [ ] nenhuma matéria ou documento de produção anexado;
+- [ ] nenhuma credencial, senha, cookie ou token anexado;
+- [ ] nenhum documento de produção anexado;
 - [ ] nenhuma chave privada versionada;
-- [ ] evidências não contêm conteúdo sensível.
+- [ ] evidências sem conteúdo sensível;
+- [ ] SHA-256 arquivado com a entrega;
+- [ ] certificado temporário identificado pelo thumbprint;
+- [ ] plano para assinatura corporativa registrado antes do canal estável.
 
-## Aceite
+## 9. Aceite
 
+- [ ] testes obrigatórios aprovados;
+- [ ] pendências e limitações registradas;
 - [ ] aceite funcional da GERDO;
-- [ ] aceite técnico da GERINF/TI;
-- [ ] decisão de promoção do canal registrada;
-- [ ] inventário da Release preenchido.
+- [ ] aceite técnico da TI;
+- [ ] estações autorizadas registradas;
+- [ ] decisão de manter, ampliar, corrigir ou suspender o piloto registrada;
+- [ ] inventário da Release atualizado.
