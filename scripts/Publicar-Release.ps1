@@ -10,7 +10,9 @@ param(
 
     [string]$Tag = 'v1.0.0-pilot.1',
 
-    [string]$Title = 'Entrega 1 — Piloto operacional'
+    [string]$Title = 'Entrega 1 — Piloto operacional',
+
+    [switch]$ReplaceAssets
 )
 
 $ErrorActionPreference = 'Stop'
@@ -66,17 +68,20 @@ try {
 }
 
 if ($releaseExists) {
-    Write-Host "Release $Tag já existe. Atualizando ativos..."
-    & $gh.Source release upload $Tag `
-        $setup `
-        $hashFile `
-        --repo $Repository `
-        --clobber
-    if ($LASTEXITCODE -ne 0) {
-        throw 'RELEASE_ASSET_UPLOAD_FAILED'
+    if ($ReplaceAssets) {
+        Write-Warning 'Substituindo os ativos existentes da Release por solicitação explícita.'
+        & $gh.Source release upload $Tag `
+            $setup `
+            $hashFile `
+            --repo $Repository `
+            --clobber
+        if ($LASTEXITCODE -ne 0) {
+            throw 'RELEASE_ASSET_UPLOAD_FAILED'
+        }
+    } else {
+        Write-Host 'Release já existe. Ativos preservados; sincronizando apenas título e notas.'
     }
 
-    Write-Host 'Sincronizando título e notas da Release...'
     & $gh.Source release edit $Tag `
         --repo $Repository `
         --title $Title `
@@ -103,6 +108,9 @@ if ($releaseExists) {
 Write-Host 'Release publicada e sincronizada com sucesso.'
 Write-Host "Repositório: $Repository"
 Write-Host "Tag: $Tag"
-Write-Host "SHA-256: $actualHash"
+Write-Host "SHA-256 local validado: $actualHash"
+if ($releaseExists -and -not $ReplaceAssets) {
+    Write-Host 'Ativos existentes não foram modificados.'
+}
 
 & $gh.Source release view $Tag --repo $Repository --web
