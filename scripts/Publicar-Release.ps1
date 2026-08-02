@@ -54,8 +54,18 @@ if ($LASTEXITCODE -ne 0) {
     throw 'GITHUB_CLI_NOT_AUTHENTICATED: execute gh auth login'
 }
 
-& $gh.Source release view $Tag --repo $Repository *> $null
-$releaseExists = $LASTEXITCODE -eq 0
+# A ausência da Release é um resultado esperado na primeira publicação.
+# Windows PowerShell pode transformar a saída de erro do gh em exceção quando
+# ErrorActionPreference está em Stop, portanto a sondagem usa Continue e
+# descarta stdout/stderr antes de avaliar somente o código de saída.
+$previousErrorActionPreference = $ErrorActionPreference
+try {
+    $ErrorActionPreference = 'Continue'
+    & $gh.Source release view $Tag --repo $Repository 1>$null 2>$null
+    $releaseExists = $LASTEXITCODE -eq 0
+} finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+}
 
 if ($releaseExists) {
     Write-Host "Release $Tag já existe. Atualizando ativos..."
