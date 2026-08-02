@@ -73,15 +73,31 @@ Transcreva o resultado na seção anterior e registre o responsável pela confer
 
 ## 5. Identificar o certificado do piloto
 
-O instalador usa certificado temporário de laboratório. Para listar certificados relacionados, sem removê-los:
+O manifesto instalado registra o thumbprint utilizado na geração do pacote:
+
+```text
+%ProgramFiles%\EGBA\ReguaEditorial\release-manifest.json
+```
+
+Leia o valor registrado:
+
+```powershell
+$ManifestPath = "$env:ProgramFiles\EGBA\ReguaEditorial\release-manifest.json"
+$Manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
+
+$Manifest |
+  Select-Object signer, certificateThumbprint, certificateNotAfter, signingMode
+```
+
+Depois liste os certificados presentes no computador, sem removê-los:
 
 ```powershell
 Get-ChildItem Cert:\LocalMachine\Root, Cert:\LocalMachine\TrustedPublisher |
-  Where-Object { $_.Subject -eq 'CN=Empresa Grafica da Bahia' } |
+  Where-Object { $_.Thumbprint -eq $Manifest.certificateThumbprint } |
   Select-Object Subject, Thumbprint, NotAfter, PSParentPath
 ```
 
-Compare o thumbprint com o manifesto da Release instalada antes de registrar ou remover qualquer certificado.
+O thumbprint do manifesto e o do certificado instalado devem coincidir.
 
 ## 6. Materiais proibidos
 
