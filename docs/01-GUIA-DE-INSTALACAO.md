@@ -109,13 +109,14 @@ Em `chrome://extensions`, confirme:
 Depois execute o teste funcional mínimo:
 
 1. abra uma matéria compatível no EGBANET;
-2. abra a Régua Editorial;
-3. confira se protocolo, cliente e matéria foram identificados;
-4. processe um arquivo DOCX de teste;
-5. confirme a exibição da prévia, da medição e do valor;
-6. salve o cálculo;
-7. localize o registro na área de consultas;
-8. gere um relatório e exporte um CSV.
+2. clique no ícone **Régua Editorial SieDOE** na barra do Chrome;
+3. confirme que o painel lateral foi aberto;
+4. confira se protocolo, cliente e matéria foram identificados;
+5. processe um arquivo DOCX de teste;
+6. confirme a exibição da prévia, da medição e do valor;
+7. salve o cálculo;
+8. localize o registro na área de consultas;
+9. gere um relatório e exporte um CSV.
 
 Nas estações com Microsoft Word, teste também um arquivo DOC ou RTF.
 
@@ -124,7 +125,7 @@ Nas estações com Microsoft Word, teste também um arquivo DOC ou RTF.
 Antes de encerrar o atendimento, informe ao operador:
 
 - usar sempre o mesmo perfil do Chrome;
-- abrir primeiro a matéria no EGBANET e depois a Régua Editorial;
+- abrir primeiro a matéria no EGBANET e depois clicar no ícone da Régua Editorial;
 - revisar a prévia e o valor antes de salvar;
 - não limpar os dados do navegador sem orientação;
 - não ativar o modo desenvolvedor do Chrome;
@@ -156,17 +157,45 @@ Confirme no resultado:
 |---|---|
 | A estação não está no domínio | Interromper a instalação e regularizar o vínculo com a TI |
 | A extensão não aparece | Fechar todos os processos do Chrome, reabrir e recarregar `chrome://policy` |
+| O ícone fica desativado | Confirmar que a aba atual é uma página compatível de matéria do EGBANET |
 | DOC ou RTF não converte | Confirmar se o Word está instalado, licenciado e aberto ao menos uma vez |
 | DOCX funciona, mas DOC/RTF falha | Executar o diagnóstico do programa auxiliar e registrar a mensagem exibida |
 | A extensão aparece com outro ID | Interromper o uso e acionar a equipe responsável pela distribuição |
 | O cálculo não permanece salvo | Confirmar o mesmo perfil do Chrome e verificar se os dados do navegador foram limpos |
 | O Windows bloqueia a execução | Confirmar origem, nome e SHA-256; não contornar o bloqueio quando houver divergência |
 
-## 9. Reparar ou remover
+## 9. Reparar a instalação
 
-Use **Aplicativos instalados** no Windows para reparar ou remover a Régua Editorial.
+Feche o Chrome e abra o PowerShell **como administrador**. Execute:
 
-A remoção padrão retira o programa auxiliar, mas preserva a extensão e os cálculos locais. Nesse estado, DOCX, consultas e relatórios podem continuar funcionando; a conversão automática de DOC e RTF fica indisponível.
+```powershell
+$InstallRoot = "$env:ProgramFiles\EGBA\ReguaEditorial"
+
+& "$env:WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" `
+  -NoProfile `
+  -ExecutionPolicy Bypass `
+  -File "$InstallRoot\Repair-ReguaEditorial.ps1" `
+  -PackageRoot $InstallRoot
+```
+
+Depois do reparo:
+
+1. reabra o Chrome;
+2. recarregue `chrome://policy`;
+3. confirme versão e ID da extensão;
+4. execute o diagnóstico do programa auxiliar;
+5. confira se os cálculos anteriores permanecem disponíveis.
+
+## 10. Remover a instalação
+
+Em **Configurações > Aplicativos > Aplicativos instalados**, localize **Régua Editorial SieDOE** e execute a desinstalação.
+
+A remoção padrão:
+
+- retira o programa auxiliar;
+- preserva a extensão e os cálculos locais;
+- pode manter DOCX, consultas e relatórios funcionando;
+- deixa a conversão automática de DOC e RTF indisponível.
 
 Antes de remover também a extensão ou limpar o perfil do Chrome:
 
