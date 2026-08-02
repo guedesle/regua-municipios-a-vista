@@ -4,175 +4,138 @@
 
 ### Municípios à Vista
 
-**Distribuição corporativa da Entrega 1 para o fluxo editorial do Caderno Municípios**
+**Ferramenta de apoio à preparação, medição, cálculo e consulta de publicações do Caderno Municípios no EGBANET.**
 
-[Baixar versão piloto](https://github.com/guedesle/regua-municipios-a-vista/releases/tag/v1.0.0-pilot.1) · [Instalação](docs/01-GUIA-DE-INSTALACAO.md) · [Homologação](docs/02-GUIA-DE-HOMOLOGACAO.md) · [Suporte](docs/03-OPERACAO-E-SUPORTE.md)
+[Baixar instalador](https://github.com/guedesle/regua-municipios-a-vista/releases/tag/v1.0.0-pilot.1) · [Guia de instalação](docs/01-GUIA-DE-INSTALACAO.md) · [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md) · [Suporte](docs/03-OPERACAO-E-SUPORTE.md)
 
 </div>
 
 ---
 
+A Régua Editorial funciona no Google Chrome e acompanha o usuário durante o tratamento de uma matéria no EGBANET. Ela permite processar o arquivo da publicação, aplicar as regras editoriais homologadas, conferir a prévia, medir o conteúdo, calcular o valor e guardar o resultado para consultas e relatórios.
+
 > [!IMPORTANT]
-> Este é um repositório **privado de distribuição, documentação operacional e homologação**. O código-fonte, os testes e o pipeline de build permanecem no repositório de desenvolvimento `guedesle/calculadora-editorial`.
+> Esta versão é destinada ao piloto interno da EGBA e deve ser instalada somente em estações autorizadas.
 
-## Visão geral
+## Instalação em 5 passos
 
-A **Régua Editorial SieDOE** é uma solução local para apoio ao processamento, à padronização, à medição e ao cálculo de publicações do Caderno Municípios no EGBANET.
+1. Acesse a [Release `v1.0.0-pilot.1`](https://github.com/guedesle/regua-municipios-a-vista/releases/tag/v1.0.0-pilot.1).
+2. Baixe os dois arquivos:
+   - `ReguaEditorial-Entrega1-Setup-x64.exe`
+   - `ReguaEditorial-Entrega1-Setup-x64.exe.sha256`
+3. Feche completamente o Google Chrome.
+4. Execute o instalador `.exe` como administrador.
+5. Reabra o Chrome e acesse uma matéria no EGBANET.
 
-A Entrega 1 reúne, em um único instalador Windows, a extensão Chrome operacional, o Native Helper autocontido e os componentes administrativos necessários para instalação controlada em estações corporativas da EGBA.
+Antes de instalar, confirme que a estação possui:
 
-## Estado da entrega
+- Windows x64;
+- Google Chrome;
+- vínculo com o domínio corporativo da empresa;
+- credencial administrativa para a instalação;
+- Microsoft Word desktop, quando for necessário converter arquivos DOC ou RTF.
 
-| Item | Valor |
-|---|---|
-| Situação | Disponível para piloto e homologação corporativa |
-| Release | `v1.0.0-pilot.1` |
-| Canal | `pilot` |
-| Setup Windows | `1.0.0` |
-| Extensão Chrome | `0.7.3` |
-| Native Helper | `0.1.4` |
-| Contrato Native Messaging | `1.2.0` |
-| IndexedDB / schema | `3` |
-| Extension ID | `chdfbekdjpecdajbpdelmhpemenoelmd` |
-| Native host | `com.egba.regua_editorial.helper` |
+O Word não é necessário para processar DOCX, realizar cálculos ou consultar relatórios.
+
+Para conferir a integridade do arquivo antes da instalação, siga a seção [Verificar o instalador](docs/01-GUIA-DE-INSTALACAO.md#verificar-o-instalador).
+
+## Primeiro uso
+
+1. Abra no EGBANET a página de edição ou consulta da matéria.
+2. Abra a Régua Editorial no Chrome.
+3. Confira os dados identificados na página, como protocolo, cliente e matéria.
+4. Processe o arquivo original:
+   - **DOCX:** processamento direto;
+   - **DOC ou RTF:** conversão automática quando o Word estiver instalado;
+   - caso a conversão automática não esteja disponível, converta o arquivo para DOCX e adicione-o manualmente.
+5. Revise a prévia e as medidas apresentadas.
+6. Confira o valor calculado e salve o registro.
+7. Use a área de consultas para localizar cálculos anteriores e emitir relatórios.
 
 > [!NOTE]
-> Esta distribuição é temporária e restrita à equipe autorizada. Ela não deve ser tratada como publicação pública, instalador de uso geral ou substituto do repositório de desenvolvimento.
+> Os cálculos ficam armazenados localmente no perfil do Chrome utilizado na estação. Não limpe os dados do navegador e não troque de perfil sem orientação da equipe de suporte.
 
-## Obter o pacote
+## O que a ferramenta permite fazer
 
-A instalação deve ser feita exclusivamente com os ativos disponibilizados na Release privada:
-
-- `ReguaEditorial-Entrega1-Setup-x64.exe`
-- `ReguaEditorial-Entrega1-Setup-x64.exe.sha256`
-
-**Acesso:** [Release v1.0.0-pilot.1](https://github.com/guedesle/regua-municipios-a-vista/releases/tag/v1.0.0-pilot.1)
-
-Não é necessário baixar o código do repositório para instalar a solução.
-
-### Verificar a integridade
-
-No PowerShell, na pasta em que os dois arquivos foram baixados:
-
-```powershell
-$Setup = ".\ReguaEditorial-Entrega1-Setup-x64.exe"
-$HashFile = ".\ReguaEditorial-Entrega1-Setup-x64.exe.sha256"
-
-$Actual = (Get-FileHash $Setup -Algorithm SHA256).Hash.ToLowerInvariant()
-$Expected = ((Get-Content $HashFile -Raw).Trim() -split "\s+")[0].ToLowerInvariant()
-
-if ($Actual -ne $Expected) {
-    throw "HASH_DIVERGENTE: expected=$Expected actual=$Actual"
-}
-
-Write-Host "Integridade confirmada: $Actual"
-```
-
-> [!WARNING]
-> Não execute o instalador quando o hash divergir, quando o arquivo tiver sido renomeado ou quando tiver sido recebido fora da Release oficial.
-
-## Requisitos da estação
-
-| Requisito | Condição |
+| Atividade | Resultado |
 |---|---|
-| Sistema operacional | Windows x64 suportado pela empresa |
-| Navegador | Google Chrome |
-| Gerenciamento | Estação associada ao Active Directory |
-| Instalação | Credencial administrativa durante a implantação |
-| Operação | Usuário padrão após a instalação |
-| Microsoft Word | Necessário para conversão automática de DOC e RTF |
-| Internet pública | Não exigida para a instalação standalone |
-| .NET Runtime | Não exigido previamente; o Helper é autocontido |
+| Processar a matéria | Prepara o documento conforme as regras editoriais aprovadas |
+| Conferir a publicação | Exibe uma prévia para validação antes do cálculo |
+| Medir e calcular | Separa tarja e conteúdo, calcula a centimetragem e o preço |
+| Salvar o cálculo | Mantém o registro disponível para consulta posterior |
+| Localizar matérias | Permite pesquisa por data, protocolo e cliente |
+| Abrir a matéria no EGBANET | Usa o identificador da matéria para retornar à página correspondente |
+| Emitir relatórios | Consolida os cálculos por dia ou intervalo de datas |
+| Exportar dados | Gera arquivos JSON e CSV para uso em planilhas ou outras ferramentas |
 
-## Instalação rápida
+## Como a solução funciona
 
-1. Baixe o `.exe` e o `.sha256` na Release oficial.
-2. Confirme o SHA-256 do instalador.
-3. Feche completamente o Google Chrome.
-4. Execute o Setup como administrador.
-5. Reabra o Chrome e valide a instalação em `chrome://policy` e `chrome://extensions`.
-6. Execute os casos mínimos do [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md).
+A instalação reúne quatro partes que trabalham em conjunto:
 
-O procedimento completo, incluindo pré-checks, evidências e tratamento de falhas, está no [Guia de instalação](docs/01-GUIA-DE-INSTALACAO.md).
+- **Extensão do Chrome:** apresenta a interface da Régua Editorial e lê as informações exibidas na página da matéria;
+- **programa auxiliar do Windows:** realiza operações locais que o navegador não executa sozinho, principalmente a conversão de DOC e RTF com o Microsoft Word;
+- **armazenamento local:** guarda os cálculos no perfil do Chrome da estação, sem exigir um banco de dados externo;
+- **instalador:** copia os componentes necessários e configura o Chrome para disponibilizar a extensão aos usuários autorizados.
 
-## Escopo funcional da Entrega 1
+Não é necessário instalar Node.js, Git, ferramentas de desenvolvimento ou o .NET Runtime separadamente.
 
-A versão distribuída contempla:
+## Depois da instalação
 
-- leitura dos dados da matéria no EGBANET;
-- processamento direto de DOCX;
-- conversão automática de DOC e RTF por Microsoft Word COM;
-- aplicação das regras editoriais homologadas;
-- geração de prévia, medição e cálculo financeiro;
-- persistência local dos cálculos em IndexedDB;
-- recuperação e reprocessamento controlado;
-- relatórios por data ou intervalo;
-- filtros por protocolo e cliente;
-- exportação JSON e CSV.
+A equipe responsável pela implantação deve confirmar:
 
-## Arquitetura da distribuição
+- presença da extensão **Régua Editorial SieDOE** no Chrome;
+- versão `0.7.3`;
+- funcionamento do processamento de DOCX;
+- conversão de DOC e RTF nas estações com Word;
+- salvamento e recuperação de cálculos;
+- geração de relatório e exportação CSV.
 
-```mermaid
-flowchart LR
-    A[Release privada no GitHub] --> B[Setup Windows x64]
-    B --> C[Extensão Chrome 0.7.3]
-    B --> D[Native Helper 0.1.4]
-    C <--> D
-    C --> E[EGBANET]
-    C --> F[IndexedDB local]
-    D --> G[Microsoft Word COM]
-```
+O roteiro completo está no [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md).
 
-O Setup incorpora os componentes necessários à primeira instalação. A chave privada PEM usada para assinar a extensão não faz parte do pacote nem deste repositório.
+## Documentação por necessidade
 
-## Documentação operacional
-
-| Documento | Público principal | Finalidade |
-|---|---|---|
-| [Guia de instalação](docs/01-GUIA-DE-INSTALACAO.md) | TI e técnico instalador | Preparar, instalar e validar a estação |
-| [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md) | GERDO, TI e operadores | Executar os casos de aceite |
-| [Operação e suporte](docs/03-OPERACAO-E-SUPORTE.md) | Operação e suporte | Classificar ocorrências e coletar evidências |
-| [Plano de rollback](docs/04-PLANO-DE-ROLLBACK.md) | TI e responsáveis pela liberação | Reverter componentes sem perda indevida de dados |
-| [Arquitetura de distribuição](docs/05-ARQUITETURA-DE-DISTRIBUICAO.md) | TI e desenvolvimento | Entender componentes, limites e dependências |
-| [Checklist de entrega](docs/06-CHECKLIST-DE-ENTREGA.md) | Responsáveis pela release | Verificar prontidão e aceite |
-| [Inventário da release](docs/07-INVENTARIO-DA-RELEASE.md) | Auditoria e suporte | Registrar versões, identidade e integridade |
-
-## Segurança e privacidade
-
-- a chave PEM operacional permanece fora do repositório e das Releases;
-- documentos de produção, conteúdo de matérias e arquivos convertidos não devem ser anexados aqui;
-- cookies, tokens, credenciais e dados de autenticação são proibidos em issues, commits e logs;
-- evidências técnicas devem ser sanitizadas;
-- a extensão e o Setup devem ser distribuídos apenas a usuários autorizados;
-- remoções que possam afetar o IndexedDB exigem procedimento controlado.
-
-Consulte a [Política de segurança](SECURITY.md) antes de registrar incidentes ou compartilhar evidências.
-
-## Limites deste repositório
-
-### Este repositório contém
-
-- Releases oficiais para consumo interno;
-- documentação de instalação e homologação;
-- inventários e notas de entrega;
-- scripts administrativos de publicação da Release.
-
-### Este repositório não contém
-
-- código-fonte da extensão ou do Helper;
-- histórico de desenvolvimento;
-- dependências de build;
-- chaves privadas ou credenciais;
-- documentos e dados operacionais do EGBANET.
-
-## Responsabilidades
-
-| Papel | Responsabilidade principal |
+| Preciso de... | Consulte |
 |---|---|
-| GERDO | Escopo, regras de negócio, homologação funcional e aceite |
-| GERINF / TI | Instalação, políticas, estações, suporte técnico e rollback |
-| Desenvolvimento | Build reproduzível, correções, versões e documentação técnica |
-| Operador | Uso conforme o fluxo homologado e registro adequado de ocorrências |
+| instalar ou reparar a aplicação | [Guia de instalação](docs/01-GUIA-DE-INSTALACAO.md) |
+| validar a entrega em uma estação | [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md) |
+| usar a ferramenta ou registrar uma falha | [Operação e suporte](docs/03-OPERACAO-E-SUPORTE.md) |
+| interromper ou reverter uma implantação | [Plano de rollback](docs/04-PLANO-DE-ROLLBACK.md) |
+| entender os componentes instalados | [Como a distribuição funciona](docs/05-ARQUITETURA-DE-DISTRIBUICAO.md) |
+| conferir a prontidão da entrega | [Checklist de entrega](docs/06-CHECKLIST-DE-ENTREGA.md) |
+| consultar versões e arquivos da Release | [Inventário da Release](docs/07-INVENTARIO-DA-RELEASE.md) |
+
+## Suporte rápido
+
+Antes de abrir uma ocorrência:
+
+1. feche e reabra completamente o Chrome;
+2. confirme se a matéria está em uma página compatível do EGBANET;
+3. identifique o formato do arquivo: DOCX, DOC ou RTF;
+4. copie a mensagem de erro exibida, sem anexar o conteúdo da matéria;
+5. informe data, horário, ação realizada e versão da extensão.
+
+Não compartilhe senhas, cookies, tokens, documentos de produção ou dados reais de clientes em issues ou evidências técnicas. Consulte [Operação e suporte](docs/03-OPERACAO-E-SUPORTE.md) e a [Política de segurança](SECURITY.md).
+
+<details>
+<summary><strong>Identificação técnica da entrega</strong></summary>
+
+| Item | Versão ou identificação |
+|---|---|
+| Release | `v1.0.0-pilot.1` |
+| Canal | `pilot` |
+| Instalador | `1.0.0` |
+| Extensão Chrome | `0.7.3` |
+| Programa auxiliar do Windows | `0.1.4` |
+| Comunicação entre extensão e programa auxiliar | `1.2.0` |
+| Estrutura do armazenamento local | `3` |
+| ID da extensão | `chdfbekdjpecdajbpdelmhpemenoelmd` |
+| Identificador do programa auxiliar | `com.egba.regua_editorial.helper` |
+
+</details>
+
+## Sobre este repositório
+
+Este repositório privado contém os instaladores oficiais, as notas de entrega e a documentação necessária para implantação e uso. O código-fonte, os testes e o processo de geração do instalador permanecem separados no repositório de desenvolvimento.
 
 ---
 
