@@ -62,17 +62,18 @@ O teste H-12 é obrigatório somente nas estações em que DOC e RTF façam part
 Use uma matéria e um documento de teste controlados:
 
 1. abra a matéria no EGBANET;
-2. abra a Régua Editorial;
-3. confira protocolo, cliente e identificação da matéria;
-4. processe o documento;
-5. revise a prévia;
-6. compare a medição e o preço com o resultado esperado;
-7. salve o cálculo;
-8. pesquise o registro salvo;
-9. gere relatório diário e por intervalo;
-10. exporte CSV e JSON;
-11. feche completamente o Chrome;
-12. reabra e confirme que o registro permanece disponível.
+2. clique no ícone **Régua Editorial SieDOE** na barra do Chrome;
+3. confirme que o painel lateral foi aberto;
+4. confira protocolo, cliente e identificação da matéria;
+5. processe o documento;
+6. revise a prévia;
+7. compare a medição e o preço com o resultado esperado;
+8. salve o cálculo;
+9. pesquise o registro salvo;
+10. gere relatório diário e por intervalo;
+11. exporte CSV e JSON;
+12. feche completamente o Chrome;
+13. reabra e confirme que o registro permanece disponível.
 
 ## 6. Evidências
 
