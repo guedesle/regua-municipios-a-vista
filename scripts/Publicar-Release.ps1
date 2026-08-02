@@ -54,10 +54,8 @@ if ($LASTEXITCODE -ne 0) {
     throw 'GITHUB_CLI_NOT_AUTHENTICATED: execute gh auth login'
 }
 
-# A ausência da Release é um resultado esperado na primeira publicação.
-# Windows PowerShell pode transformar a saída de erro do gh em exceção quando
-# ErrorActionPreference está em Stop, portanto a sondagem usa Continue e
-# descarta stdout/stderr antes de avaliar somente o código de saída.
+# A ausência da Release é esperada na primeira publicação. A sondagem descarta
+# stdout/stderr e usa somente o código de saída do GitHub CLI.
 $previousErrorActionPreference = $ErrorActionPreference
 try {
     $ErrorActionPreference = 'Continue'
@@ -74,6 +72,19 @@ if ($releaseExists) {
         $hashFile `
         --repo $Repository `
         --clobber
+    if ($LASTEXITCODE -ne 0) {
+        throw 'RELEASE_ASSET_UPLOAD_FAILED'
+    }
+
+    Write-Host 'Sincronizando título e notas da Release...'
+    & $gh.Source release edit $Tag `
+        --repo $Repository `
+        --title $Title `
+        --notes-file $notesPath `
+        --prerelease
+    if ($LASTEXITCODE -ne 0) {
+        throw 'RELEASE_NOTES_UPDATE_FAILED'
+    }
 } else {
     Write-Host "Criando Release $Tag..."
     & $gh.Source release create $Tag `
@@ -84,13 +95,12 @@ if ($releaseExists) {
         --notes-file $notesPath `
         --prerelease `
         --target main
+    if ($LASTEXITCODE -ne 0) {
+        throw 'RELEASE_CREATION_FAILED'
+    }
 }
 
-if ($LASTEXITCODE -ne 0) {
-    throw 'RELEASE_PUBLICATION_FAILED'
-}
-
-Write-Host 'Release publicada com sucesso.'
+Write-Host 'Release publicada e sincronizada com sucesso.'
 Write-Host "Repositório: $Repository"
 Write-Host "Tag: $Tag"
 Write-Host "SHA-256: $actualHash"
