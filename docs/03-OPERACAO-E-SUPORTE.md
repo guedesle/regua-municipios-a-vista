@@ -7,12 +7,13 @@ Este documento orienta o atendimento ao usuário e o diagnóstico inicial da Ré
 O operador deve:
 
 1. abrir a matéria no EGBANET;
-2. abrir a Régua Editorial no Chrome;
-3. conferir os dados identificados;
-4. processar o documento;
-5. revisar prévia, medição e valor;
-6. salvar o cálculo;
-7. consultar registros ou emitir relatórios quando necessário.
+2. clicar no ícone **Régua Editorial SieDOE** na barra do Chrome;
+3. confirmar que o painel lateral foi aberto;
+4. conferir os dados identificados;
+5. processar o documento;
+6. revisar prévia, medição e valor;
+7. salvar o cálculo;
+8. consultar registros ou emitir relatórios quando necessário.
 
 Para instruções detalhadas, consulte o [Guia rápido de uso](08-GUIA-RAPIDO-DE-USO.md).
 
@@ -33,12 +34,13 @@ A equipe de TI ou suporte deve reforçar:
 Antes de encaminhar a ocorrência, verifique:
 
 1. a matéria está em uma página compatível do EGBANET?
-2. a extensão abre normalmente?
-3. o Chrome foi fechado e reaberto completamente?
-4. o arquivo é DOCX, DOC ou RTF?
-5. o Word está disponível quando o arquivo é DOC ou RTF?
-6. o usuário está no mesmo perfil do Chrome em que os cálculos foram salvos?
-7. há uma mensagem ou código de erro?
+2. o ícone da extensão está habilitado nessa página?
+3. o painel lateral abre normalmente?
+4. o Chrome foi fechado e reaberto completamente?
+5. o arquivo é DOCX, DOC ou RTF?
+6. o Word está disponível quando o arquivo é DOC ou RTF?
+7. o usuário está no mesmo perfil do Chrome em que os cálculos foram salvos?
+8. há uma mensagem ou código de erro?
 
 Registre:
 
@@ -69,6 +71,8 @@ A [Referência técnica](09-REFERENCIA-TECNICA.md) contém os comandos e caminho
 | Sintoma | Verificação inicial | Encaminhamento |
 |---|---|---|
 | Extensão não aparece | fechar Chrome e recarregar políticas | TI da ponta |
+| Ícone desabilitado | confirmar se a página está entre os endereços compatíveis | TI da ponta |
+| Painel não abre | recarregar a página da matéria e reiniciar o Chrome | TI da ponta |
 | Página não reconhecida | confirmar endereço da matéria no EGBANET | suporte funcional |
 | DOCX não processa | repetir com arquivo sintético e registrar erro | desenvolvimento, se persistir |
 | DOC ou RTF não converte | verificar Word e programa auxiliar | TI da ponta |
