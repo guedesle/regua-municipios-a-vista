@@ -70,6 +70,19 @@ Write-Host "Integridade confirmada: $Actual"
 > [!WARNING]
 > Não execute o instalador quando os valores forem diferentes. Baixe novamente os arquivos na Release oficial.
 
+### Aviso do Windows nesta versão piloto
+
+Esta pré-release usa um certificado temporário de laboratório. Na primeira execução, o Windows pode apresentar **Editor desconhecido** antes de o certificado ser instalado na estação.
+
+Prossiga somente quando:
+
+- o SHA-256 tiver sido validado;
+- o arquivo tiver sido baixado da Release privada oficial;
+- o nome do arquivo for exatamente `ReguaEditorial-Entrega1-Setup-x64.exe`;
+- a implantação tiver sido autorizada pela equipe responsável.
+
+Durante a instalação, o certificado público do pacote é adicionado aos repositórios de confiança da estação para validar os componentes locais. Esse mecanismo é exclusivo do piloto e deve ser substituído por assinatura corporativa reconhecida antes da distribuição estável.
+
 ## 4. Instalar
 
 1. Copie os dois arquivos para uma pasta local da estação.
@@ -147,11 +160,19 @@ Confirme no resultado:
 | DOCX funciona, mas DOC/RTF falha | Executar o diagnóstico do programa auxiliar e registrar a mensagem exibida |
 | A extensão aparece com outro ID | Interromper o uso e acionar a equipe responsável pela distribuição |
 | O cálculo não permanece salvo | Confirmar o mesmo perfil do Chrome e verificar se os dados do navegador foram limpos |
+| O Windows bloqueia a execução | Confirmar origem, nome e SHA-256; não contornar o bloqueio quando houver divergência |
 
 ## 9. Reparar ou remover
 
 Use **Aplicativos instalados** no Windows para reparar ou remover a Régua Editorial.
 
-Antes de uma remoção completa, confirme se existem cálculos que precisam ser exportados. A remoção da extensão ou a limpeza do perfil do Chrome pode eliminar os registros locais.
+A remoção padrão retira o programa auxiliar, mas preserva a extensão e os cálculos locais. Nesse estado, DOCX, consultas e relatórios podem continuar funcionando; a conversão automática de DOC e RTF fica indisponível.
+
+Antes de remover também a extensão ou limpar o perfil do Chrome:
+
+1. exporte os registros necessários;
+2. registre a quantidade de cálculos e os totais;
+3. obtenha autorização expressa;
+4. siga o [Plano de reversão](04-PLANO-DE-ROLLBACK.md).
 
 Para diagnóstico detalhado, consulte a [Referência técnica](09-REFERENCIA-TECNICA.md).
