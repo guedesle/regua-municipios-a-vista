@@ -38,7 +38,7 @@ O procedimento completo está no [Guia de instalação para a equipe de TI](docs
 ## Primeiro uso
 
 1. Abra a página da matéria no EGBANET.
-2. Abra a Régua Editorial no Chrome.
+2. Clique no ícone **Régua Editorial SieDOE** na barra do Chrome para abrir o painel lateral.
 3. Confira protocolo, cliente e identificação da matéria.
 4. Processe o arquivo:
    - **DOCX:** processamento direto;
