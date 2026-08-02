@@ -1,102 +1,124 @@
 # Guia de homologação — Entrega 1
 
-## 1. Objetivo
+Este guia comprova que a Régua Editorial foi instalada corretamente e atende aos fluxos previstos antes da liberação ao usuário.
 
-Comprovar que o instalador implanta e opera a Régua Editorial SieDOE em estação Windows associada ao Active Directory, preservando a baseline funcional homologada.
+## 1. Responsáveis
 
-## 2. Baseline
+| Papel | Responsabilidade |
+|---|---|
+| TI da ponta | instalar, validar Chrome, domínio, programa auxiliar e Word |
+| Operador ou representante da GERDO | validar prévia, medição, cálculo, consultas e relatórios |
+| Responsável pela entrega | consolidar evidências e registrar o aceite ou a reprovação |
 
-- Setup: `1.0.0`;
-- extensão: `0.7.3`;
-- Helper: `0.1.4`;
-- contrato: `1.2.0`;
-- IndexedDB/schema: `3`;
-- Extension ID: `chdfbekdjpecdajbpdelmhpemenoelmd`;
-- native host: `com.egba.regua_editorial.helper`.
+## 2. Antes dos testes
 
-## 3. Critérios de entrada
+Confirme:
 
-- hash do Setup validado;
-- estação Windows x64;
-- `PartOfDomain = true`;
-- Chrome instalado;
-- operador e técnico identificados;
-- corpus sintético disponível;
-- nenhuma extensão descompactada concorrente no perfil operacional.
+- instalador e arquivo `.sha256` baixados da Release oficial;
+- SHA-256 validado;
+- estação Windows x64 vinculada ao domínio corporativo;
+- Google Chrome instalado;
+- usuário e perfil do Chrome identificados;
+- arquivos de teste sintéticos ou expressamente autorizados;
+- ausência de outra versão descompactada da extensão no perfil usado para homologação.
 
-## 4. Matriz mínima
+> [!WARNING]
+> Não use documentos reais de clientes quando um arquivo sintético for suficiente. Não registre conteúdo de matéria nas evidências.
 
-| ID | Verificação | Resultado esperado |
-|---|---|---|
-| H-01 | instalação como administrador | conclusão sem erro |
-| H-02 | estação associada ao AD | `PartOfDomain = true` |
-| H-03 | extensão no Chrome | versão `0.7.3`, ID correto e gerenciada |
-| H-04 | Helper instalado | versão `0.1.4` |
-| H-05 | contrato nativo | versão `1.2.0` |
-| H-06 | matéria DOCX | prévia, medição e cálculo corretos |
-| H-07 | matéria DOC | conversão automática quando Word disponível |
-| H-08 | matéria RTF | conversão automática quando Word disponível |
-| H-09 | relatório por data | registros e totais corretos |
-| H-10 | relatório por intervalo | filtros e agregações corretos |
-| H-11 | exportação JSON | arquivo válido e completo |
-| H-12 | exportação CSV | abertura correta em planilha |
-| H-13 | reinício do Chrome | extensão e registros preservados |
-| H-14 | reparo | componentes restaurados sem duplicação |
-| H-15 | remoção padrão | Helper removido e extensão/dados preservados |
+## 3. Identificação da versão
 
-## 5. Homologação funcional
+| Item | Valor esperado |
+|---|---|
+| Release | `v1.0.0-pilot.1` |
+| Instalador | `1.0.0` |
+| Extensão | `0.7.3` |
+| Programa auxiliar do Windows | `0.1.4` |
+| Comunicação local | `1.2.0` |
+| ID da extensão | `chdfbekdjpecdajbpdelmhpemenoelmd` |
 
-Executar com dados sintéticos ou autorizados:
+## 4. Testes obrigatórios
 
-1. abrir uma matéria compatível no Egbanet;
-2. processar um DOCX;
-3. validar tarja, conteúdo, medição e preço;
-4. salvar o cálculo;
-5. consultar o registro salvo;
-6. gerar relatório diário;
-7. exportar JSON e CSV;
-8. reiniciar completamente o Chrome;
-9. confirmar a persistência dos registros;
-10. testar DOC e RTF quando houver Word disponível.
+| ID | Responsável | Teste | Resultado esperado |
+|---|---|---|---|
+| H-01 | TI | validar o SHA-256 | código igual ao arquivo publicado |
+| H-02 | TI | executar o instalador como administrador | instalação concluída sem erro |
+| H-03 | TI | verificar vínculo com o domínio | `PartOfDomain = True` |
+| H-04 | TI | conferir a extensão no Chrome | nome, versão e ID corretos; instalação gerenciada |
+| H-05 | TI | executar diagnóstico do programa auxiliar | versão, comunicação e pasta temporária válidas |
+| H-06 | Operação | processar DOCX | prévia, medição e cálculo apresentados |
+| H-07 | Operação | salvar e consultar o cálculo | registro localizado com os mesmos valores |
+| H-08 | Operação | emitir relatório por data | quantidade e totais coerentes |
+| H-09 | Operação | exportar CSV | arquivo abre corretamente em planilha |
+| H-10 | Operação | exportar JSON | arquivo válido e com os registros esperados |
+| H-11 | TI/Operação | fechar e reabrir o Chrome | extensão e cálculos permanecem disponíveis |
+| H-12 | TI/Operação | processar DOC ou RTF com Word | conversão concluída sem alterar o original |
+| H-13 | TI | executar reparo | componentes restaurados sem trocar o ID ou apagar cálculos |
+| H-14 | TI | executar remoção padrão em estação de teste | programa auxiliar removido; extensão e cálculos preservados |
 
-## 6. Evidências permitidas
+O teste H-12 é obrigatório somente nas estações em que DOC e RTF façam parte do uso previsto.
 
-Registrar:
+## 5. Roteiro funcional
 
-- data e executor;
-- identificador pseudonimizado da estação;
-- versões dos componentes;
-- Extension ID;
-- estado do Active Directory;
-- SHA-256 do Setup;
-- resultado do probe;
-- casos aprovados ou reprovados;
-- códigos técnicos de erro.
+Use uma matéria e um documento de teste controlados:
 
-Não registrar conteúdo documental, credenciais, cookies, tokens, cliente, protocolo real ou texto de matéria.
+1. abra a matéria no EGBANET;
+2. abra a Régua Editorial;
+3. confira protocolo, cliente e identificação da matéria;
+4. processe o documento;
+5. revise a prévia;
+6. compare a medição e o preço com o resultado esperado;
+7. salve o cálculo;
+8. pesquise o registro salvo;
+9. gere relatório diário e por intervalo;
+10. exporte CSV e JSON;
+11. feche completamente o Chrome;
+12. reabra e confirme que o registro permanece disponível.
 
-## 7. Critérios de suspensão
+## 6. Evidências
 
-Interromper a homologação diante de:
+Registre apenas o necessário:
 
-- Extension ID divergente;
-- perda ou alteração indevida de registros;
-- cálculo divergente da baseline;
-- associação de documento à matéria errada;
-- sobrescrita do original;
+- data e responsável pelo teste;
+- identificação interna ou pseudonimizada da estação;
+- versões do instalador, extensão e programa auxiliar;
+- ID da extensão;
+- resultado da verificação do domínio;
+- SHA-256 do instalador;
+- resultado de cada caso: aprovado, reprovado ou não aplicável;
+- mensagem ou código de erro, quando houver.
+
+Não registre:
+
+- texto da matéria;
+- documento de produção;
+- senha, cookie ou token;
+- protocolo, cliente ou ID real da matéria;
+- conteúdo integral do armazenamento local.
+
+## 7. Interromper a homologação
+
+Suspenda os testes e comunique os responsáveis quando ocorrer:
+
+- ID da extensão diferente do previsto;
+- perda ou alteração de cálculos já salvos;
+- matéria ou documento associado ao registro errado;
+- cálculo divergente sem explicação;
+- arquivo original sobrescrito;
 - execução de macro;
-- assinatura ou hash divergente;
-- falha sistêmica em mais de uma estação;
-- incidente de privacidade.
+- SHA-256 divergente;
+- falha repetida em mais de uma estação;
+- exposição de dados ou outro incidente de segurança.
 
 ## 8. Critério de aceite
 
-A entrega é considerada homologada quando:
+A entrega pode ser liberada para o piloto quando:
 
-- todos os casos críticos forem aprovados;
-- não houver perda de dados locais;
-- instalação, reparo e remoção padrão estiverem comprovados;
-- DOCX estiver funcional;
-- DOC/RTF estiverem funcionais nas estações com Word;
-- relatórios e exportações estiverem corretos;
-- evidências estiverem registradas sem dados sensíveis.
+- todos os testes aplicáveis forem aprovados;
+- DOCX, cálculo, salvamento, consulta e relatórios funcionarem;
+- DOC e RTF funcionarem nas estações que dependem desses formatos;
+- fechamento e reabertura do Chrome não causarem perda de registros;
+- reparo e remoção padrão tiverem o comportamento previsto;
+- as evidências estiverem registradas sem dados sensíveis;
+- GERDO e TI registrarem o aceite.
+
+Use o [Checklist de entrega](06-CHECKLIST-DE-ENTREGA.md) para consolidar o resultado.
