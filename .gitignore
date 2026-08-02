@@ -1,0 +1,21 @@
+# O executável deve ser publicado como ativo de Release, não commitado.
+*.exe
+*.msi
+*.crx
+
+# Chaves e certificados privados
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Artefatos intermediários
+artifacts/
+staging/
+helper-build/
+extension-build/
+crx-test/
+
+# Sistema
+Thumbs.db
+.DS_Store
