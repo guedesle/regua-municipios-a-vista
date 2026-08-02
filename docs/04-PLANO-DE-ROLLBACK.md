@@ -1,96 +1,137 @@
-# Plano de rollback — Entrega 1
+# Plano de reversão (rollback)
 
-## 1. Princípio
+Este plano orienta a interrupção, o reparo ou a retirada controlada da Régua Editorial quando uma versão apresenta falha relevante.
 
-O rollback deve preservar o Extension ID, o perfil do Chrome e o IndexedDB. A extensão não deve ser desinstalada como mecanismo normal de reversão.
+## 1. Princípio de segurança
 
-## 2. Baseline de retorno
+Os cálculos ficam armazenados no perfil do Chrome. Por isso, a reversão deve preservar:
 
-- extensão: `0.7.3`;
-- Helper: `0.1.4`;
-- contrato: `1.2.0`;
-- Extension ID: `chdfbekdjpecdajbpdelmhpemenoelmd`.
+- o mesmo perfil do usuário;
+- o ID da extensão `chdfbekdjpecdajbpdelmhpemenoelmd`;
+- os registros locais;
+- os arquivos exportados e as evidências necessárias.
 
-## 3. Gatilhos
+> [!WARNING]
+> Remover a política da extensão, excluir a extensão ou limpar o perfil do Chrome pode eliminar os cálculos locais. Essas ações exigem exportação prévia ou autorização expressa de descarte.
 
-Executar contenção ou rollback quando houver:
+## 2. Quando iniciar a reversão
 
-- perda ou alteração indevida do IndexedDB;
-- divergência de medição ou preço;
-- troca do Extension ID;
-- incompatibilidade entre extensão e Helper;
+Avalie contenção ou reversão diante de:
+
+- perda ou alteração de cálculos;
+- medição ou preço incorreto;
+- ID da extensão diferente do previsto;
+- incompatibilidade entre a extensão e o programa auxiliar;
 - execução de macro;
-- sobrescrita do original;
-- assinatura ou hash inválido;
-- incidente de privacidade;
+- sobrescrita do documento original;
+- hash ou assinatura divergente;
+- exposição de dados;
 - falha generalizada de instalação ou atualização.
 
-## 4. Níveis de resposta
+## 3. Resposta por nível
 
-### Nível 1 — congelar distribuição
+### Nível 1 — Suspender novas instalações
 
-1. restringir a Release afetada;
-2. interromper novas instalações;
-3. preservar executável, hash e logs;
-4. registrar estações e versões afetadas;
-5. decidir entre correção e rollback.
+Use quando a causa ainda está em análise.
 
-### Nível 2 — reparar ou remover o Helper
+1. interrompa a distribuição da Release afetada;
+2. não instale em novas estações;
+3. preserve o instalador, o `.sha256` e os logs;
+4. registre versões e estações afetadas;
+5. defina se haverá correção, reparo ou reversão.
 
-Aplicável quando extensão e dados permanecem íntegros.
+### Nível 2 — Reparar a instalação
 
-1. fechar o Chrome;
-2. executar diagnóstico sanitizado;
-3. executar reparo do Setup ou remoção padrão;
-4. confirmar o Native Messaging Host;
-5. executar probe;
-6. reabrir o Chrome;
-7. confirmar DOCX e relatórios.
+Use quando a versão é considerada válida, mas uma estação está incompleta ou corrompida.
 
-A remoção padrão do Helper deve preservar extensão, política e IndexedDB.
+1. confirme a quantidade de cálculos existentes;
+2. feche o Chrome;
+3. execute o reparo pelo Windows;
+4. valide a extensão e o programa auxiliar;
+5. reabra o Chrome;
+6. confirme DOCX, salvamento e relatórios;
+7. confirme que os registros anteriores permanecem disponíveis.
 
-### Nível 3 — rollback progressivo da extensão
+### Nível 3 — Remover somente o programa auxiliar
 
-O Chrome não deve depender de downgrade para número de versão inferior. Deve ser produzida uma nova versão numericamente superior contendo o código da última baseline aprovada, assinada com a mesma PEM.
+Use quando o problema está concentrado na conversão de DOC e RTF.
+
+A remoção padrão do instalador:
+
+- retira o programa auxiliar e sua autorização de comunicação;
+- preserva a extensão, a política de instalação e os cálculos;
+- mantém potencialmente DOCX, consultas e relatórios;
+- deixa a conversão automática de DOC e RTF indisponível.
+
+Depois da remoção, feche e reabra o Chrome e valide os fluxos que permanecerão em uso.
+
+### Nível 4 — Substituir a versão da extensão
+
+O Chrome pode impedir retorno direto para um número de versão inferior. Nessa situação, publique uma versão numericamente superior contendo o código da última versão aprovada e usando a mesma identidade da extensão.
 
 Exemplo:
 
 ```text
 versão com incidente: 0.8.0
-rollback progressivo: 0.8.1 com código funcional da 0.7.3
+versão de reversão:   0.8.1 com o comportamento aprovado da 0.7.3
 ```
 
-### Nível 4 — remoção integral
+A nova versão deve passar pela homologação antes da ampliação.
 
-Último recurso. Antes de retirar a política da extensão:
+### Nível 5 — Remoção integral
 
-1. exportar JSON e CSV quando possível;
-2. registrar contagem e totais dos registros;
-3. obter autorização expressa;
-4. confirmar a disposição dos dados;
-5. usar a confirmação literal `EXPORTED_OR_DISCARD_AUTHORIZED`.
+Use somente como último recurso.
 
-A retirada da política pode fazer o Chrome desinstalar a extensão e eliminar seu armazenamento local.
+Antes de remover também a extensão:
 
-## 5. Verificação dos dados
+1. exporte JSON e CSV, quando possível;
+2. registre a quantidade de cálculos e os totais;
+3. confirme o perfil do Chrome utilizado;
+4. obtenha autorização expressa da GERDO e da TI;
+5. registre a decisão de preservar ou descartar os dados;
+6. execute a remoção técnica controlada.
 
-Antes e depois de qualquer rollback:
+A confirmação técnica exigida pelo script é:
 
-- registrar contagem de cálculos;
-- registrar datas mínima e máxima;
-- comparar totais agregados;
-- manter o mesmo perfil do Chrome;
-- manter o mesmo Extension ID;
-- proibir limpeza de dados do navegador.
+```text
+EXPORTED_OR_DISCARD_AUTHORIZED
+```
 
-Qualquer divergência transforma o caso em incidente de dados e bloqueia a retomada.
+## 4. Conferência dos dados
 
-## 6. Encerramento
+Antes e depois da ação:
 
-O rollback é concluído quando:
+- registre a quantidade de cálculos;
+- registre o período coberto pelos registros;
+- compare os totais agregados;
+- mantenha o mesmo perfil do Chrome;
+- confirme o mesmo ID da extensão;
+- não use limpeza de dados do navegador.
 
-- a baseline aprovada está operante;
-- o Helper responde com contrato compatível ou foi removido de forma controlada;
-- os dados foram conferidos;
-- os casos críticos funcionam;
-- a causa raiz e a decisão de retomada foram registradas.
+Qualquer divergência deve ser tratada como incidente de dados e impede a retomada.
+
+## 5. Certificado temporário do piloto
+
+O instalador piloto adiciona um certificado público temporário aos repositórios de confiança do Windows. A remoção padrão não deve ser presumida como remoção desse certificado.
+
+Antes de retirar o certificado:
+
+1. identifique o thumbprint usado pela Release;
+2. confirme que ele pertence somente à Régua Editorial;
+3. confirme que nenhuma instalação ativa depende dele;
+4. registre a autorização da TI;
+5. remova-o de forma controlada dos repositórios **Trusted Root** e **Trusted Publishers**.
+
+Não remova certificados apenas pelo nome do emissor, pois pode haver mais de um certificado com identificação semelhante.
+
+## 6. Retomada
+
+O uso pode ser retomado quando:
+
+- a versão aprovada estiver operando;
+- os cálculos tiverem sido conferidos;
+- os testes críticos forem aprovados;
+- o impacto e a causa estiverem registrados;
+- GERDO e TI autorizarem a retomada.
+
+Consulte a [Referência técnica](09-REFERENCIA-TECNICA.md) para comandos e locais de diagnóstico.
