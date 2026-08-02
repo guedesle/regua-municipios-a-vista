@@ -1,123 +1,162 @@
-# Operação e suporte — Entrega 1
+# Operação e suporte
 
-## 1. Papéis
+Este documento orienta o atendimento ao usuário e o diagnóstico inicial da Régua Editorial.
 
-### GERDO
+## 1. Fluxo normal de uso
 
-- aprovar o escopo e a baseline funcional;
-- selecionar operadores e casos de validação;
-- autorizar início, expansão, suspensão e encerramento do piloto;
-- validar cálculos, relatórios e exportações;
-- priorizar correções funcionais.
+O operador deve:
 
-### GERINF/TI
+1. abrir a matéria no EGBANET;
+2. abrir a Régua Editorial no Chrome;
+3. conferir os dados identificados;
+4. processar o documento;
+5. revisar prévia, medição e valor;
+6. salvar o cálculo;
+7. consultar registros ou emitir relatórios quando necessário.
 
-- disponibilizar o pacote aos usuários autorizados;
-- executar instalação elevada nas estações;
-- validar Active Directory, Chrome, Word e políticas;
-- manter inventário de estações e versões;
-- executar reparo, atualização e rollback técnico;
-- coletar somente logs sanitizados.
+Para instruções detalhadas, consulte o [Guia rápido de uso](08-GUIA-RAPIDO-DE-USO.md).
 
-### Operador
+## 2. Orientação ao usuário
 
-- usar apenas estação e perfil autorizados;
-- não ativar modo desenvolvedor;
-- não alterar políticas do Chrome;
-- registrar horário, ação e mensagem da falha;
+A equipe de TI ou suporte deve reforçar:
+
+- usar sempre o mesmo perfil do Chrome;
+- não limpar os dados do navegador;
+- não ativar o modo desenvolvedor;
+- não substituir o documento original;
+- revisar os dados da matéria antes de salvar;
+- informar a mensagem exata quando houver falha;
 - não compartilhar documentos ou dados sensíveis em canais inadequados.
 
-### Desenvolvimento
+## 3. Atendimento de primeiro nível
 
-- manter a baseline e o código no repositório de desenvolvimento;
-- produzir builds reproduzíveis;
-- preservar o Extension ID e a compatibilidade do Helper;
-- corrigir defeitos aprovados;
-- publicar documentação e Release neste repositório de distribuição.
+Antes de encaminhar a ocorrência, verifique:
 
-## 2. Suporte de primeiro nível
+1. a matéria está em uma página compatível do EGBANET?
+2. a extensão abre normalmente?
+3. o Chrome foi fechado e reaberto completamente?
+4. o arquivo é DOCX, DOC ou RTF?
+5. o Word está disponível quando o arquivo é DOC ou RTF?
+6. o usuário está no mesmo perfil do Chrome em que os cálculos foram salvos?
+7. há uma mensagem ou código de erro?
 
-Verificações iniciais:
+Registre:
 
-1. confirmar que a página do Egbanet é compatível;
-2. confirmar versão `0.7.3` e ID operacional;
-3. fechar e reabrir completamente o Chrome;
-4. confirmar se o arquivo é DOCX, DOC ou RTF;
-5. verificar se o Word está disponível para DOC/RTF;
-6. registrar a mensagem exata sem incluir conteúdo da matéria.
+- data e horário;
+- ação executada;
+- formato do arquivo;
+- versão da extensão;
+- mensagem exibida;
+- resultado após reiniciar o Chrome.
 
-## 3. Suporte de segundo nível
+## 4. Diagnóstico pela TI
 
-- verificar `chrome://policy`;
-- verificar `chrome://extensions`;
-- executar probe do Helper;
-- conferir arquivos em `%ProgramFiles%` e `%ProgramData%`;
-- conferir versão do Helper e contrato;
-- verificar logs administrativos;
-- reproduzir com corpus sintético;
-- executar reparo ou rollback autorizado.
+Quando o atendimento inicial não resolver:
 
-## 4. Classificação de severidade
+- confira `chrome://policy`;
+- confira `chrome://extensions`;
+- valide versão e ID da extensão;
+- execute o diagnóstico do programa auxiliar;
+- verifique os diretórios instalados;
+- consulte os logs administrativos;
+- reproduza com documento sintético;
+- use reparo somente depois de registrar o estado atual.
 
-### Crítica
+A [Referência técnica](09-REFERENCIA-TECNICA.md) contém os comandos e caminhos necessários.
 
-- perda de registros;
-- cálculo incorreto com impacto operacional;
+## 5. Sintomas comuns
+
+| Sintoma | Verificação inicial | Encaminhamento |
+|---|---|---|
+| Extensão não aparece | fechar Chrome e recarregar políticas | TI da ponta |
+| Página não reconhecida | confirmar endereço da matéria no EGBANET | suporte funcional |
+| DOCX não processa | repetir com arquivo sintético e registrar erro | desenvolvimento, se persistir |
+| DOC ou RTF não converte | verificar Word e programa auxiliar | TI da ponta |
+| Prévia incompleta | confirmar arquivo e regras de bloqueio | suporte funcional |
+| Medição ou preço divergente | não salvar; registrar valores esperados e obtidos | GERDO/desenvolvimento |
+| Cálculo salvo não aparece | confirmar perfil do Chrome e limpeza de dados | TI da ponta |
+| Relatório divergente | comparar filtros, período e registros individuais | suporte funcional |
+| ID da extensão divergente | interromper o uso | responsável pela distribuição |
+
+## 6. Classificação de impacto
+
+### Crítico
+
+- perda de cálculos;
+- valor incorreto com impacto operacional;
 - documento associado à matéria errada;
 - sobrescrita do original;
 - execução de macro;
-- incidente de privacidade;
-- indisponibilidade generalizada sem contorno.
+- exposição de dados;
+- indisponibilidade em várias estações sem alternativa.
 
-Ação: suspender imediatamente a coorte e avaliar rollback.
+**Ação:** suspender o uso nas estações afetadas e avaliar reversão.
 
-### Alta
+### Alto
 
-- DOC/RTF indisponível em várias estações;
-- Helper incompatível;
-- extensão não instalada em uma classe inteira de estação;
+- conversão DOC/RTF indisponível em várias estações;
+- programa auxiliar incompatível;
+- extensão ausente em um conjunto de estações;
 - relatórios indisponíveis sem perda de dados.
 
-Ação: congelar expansão e corrigir ou reverter.
+**Ação:** interromper novas instalações e priorizar correção.
 
-### Média
+### Médio
 
-- falha isolada com contorno;
+- falha isolada com alternativa de trabalho;
 - erro de instalação em uma estação;
-- degradação de desempenho.
+- lentidão relevante;
+- problema de uso que exige orientação.
 
-### Baixa
+### Baixo
 
-- texto de orientação;
-- melhoria documental;
-- ajuste visual sem impacto funcional.
+- melhoria de texto;
+- ajuste visual sem impacto funcional;
+- dúvida de operação resolvida por orientação.
 
-## 5. Logs
+## 7. Logs e privacidade
 
-Local padrão:
+Local padrão dos logs:
 
 ```text
 %ProgramData%\EGBA\ReguaEditorial\Logs\
 ```
 
-Logs podem conter versões, hashes, códigos de erro, duração, estado do AD e resultado do probe.
+Os logs podem conter versões, horários, códigos de erro, resultado do diagnóstico e estado da instalação.
 
-Logs não podem conter:
+Não devem conter:
 
-- conteúdo de documento;
-- protocolo ou cliente;
-- ID de matéria;
-- cookie, token ou senha;
-- caminho de arquivo de produção;
-- conteúdo do IndexedDB.
+- conteúdo do documento;
+- protocolo ou cliente real;
+- ID real da matéria;
+- senha, cookie ou token;
+- arquivo de produção;
+- conteúdo completo dos cálculos armazenados.
 
-## 6. Encerramento de incidente
+Antes de compartilhar um log, revise e remova dados que identifiquem matérias ou usuários quando não forem necessários ao diagnóstico.
 
-Um incidente é encerrado quando:
+## 8. Modelo de registro da ocorrência
 
-- causa e impacto foram registrados;
-- integridade dos dados foi conferida;
-- versões e estação foram verificadas;
-- correção ou rollback foi aplicado;
-- operador confirmou o resultado;
-- ação preventiva possui responsável.
+```text
+Data e horário:
+Estação:
+Usuário ou setor:
+Versão da extensão:
+Página ou fluxo utilizado:
+Formato do arquivo:
+Ação realizada:
+Mensagem apresentada:
+O problema se repetiu após reiniciar o Chrome?:
+Impacto observado:
+Evidências sanitizadas anexadas:
+```
+
+## 9. Encerramento
+
+A ocorrência pode ser encerrada quando:
+
+- causa e impacto estiverem registrados;
+- integridade dos cálculos tiver sido conferida;
+- correção, orientação ou reversão tiver sido aplicada;
+- o usuário confirmar o funcionamento;
+- houver responsável definido para qualquer ação preventiva pendente.
