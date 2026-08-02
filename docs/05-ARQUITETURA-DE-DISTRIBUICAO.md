@@ -1,55 +1,111 @@
-# Arquitetura de distribuição — Entrega 1
+# Arquitetura de distribuição
 
-## 1. Separação de responsabilidades
+Este documento explica como a Régua Editorial é empacotada, instalada e mantida nas estações. Ele se destina à TI, ao suporte de segundo nível e à equipe de desenvolvimento.
+
+## 1. Separação dos repositórios
 
 ```text
-guedsle/calculadora-editorial
-└── código-fonte, testes, build e engenharia
+guedesle/calculadora-editorial
+└── código-fonte, testes, regras, scripts de build e engenharia
 
-guedsle/regua-municipios-a-vista
-└── documentação operacional, Releases e evidências de entrega
+guedesle/regua-municipios-a-vista
+└── instaladores publicados, documentação operacional e registros de entrega
 ```
 
-O repositório de distribuição não deve receber código-fonte, `node_modules`, artefatos intermediários, chave PEM ou material de desenvolvimento.
+A separação evita que a equipe usuária precise acessar código-fonte ou ferramentas de desenvolvimento para instalar a aplicação.
 
-## 2. Pacote distribuído
+O repositório de distribuição não deve receber:
+
+- código-fonte da aplicação;
+- `node_modules` ou dependências de build;
+- pastas intermediárias de compilação;
+- chave privada usada para assinar a extensão;
+- documentos ou dados reais de produção.
+
+## 2. Pacote entregue
+
+A Release contém:
 
 ```text
 ReguaEditorial-Entrega1-Setup-x64.exe
+ReguaEditorial-Entrega1-Setup-x64.exe.sha256
 ```
 
-O Setup incorpora:
+O `.exe` reúne todos os componentes necessários à instalação inicial. O `.sha256` permite confirmar que o arquivo não foi alterado.
 
-- extensão Chrome `0.7.3` em CRX;
-- Helper `0.1.4` publicado como `win-x64 self-contained`;
-- scripts de instalação, reparo e remoção;
-- manifesto de atualização local;
-- manifesto da release e inventário SHA-256;
-- certificado público temporário de laboratório;
-- componentes necessários à instalação.
+## 3. Componentes instalados
 
-## 3. Dependências da estação
+| Componente | Papel |
+|---|---|
+| Extensão do Chrome | Exibe a interface e identifica os dados da matéria no EGBANET |
+| Programa auxiliar do Windows | Converte DOC e RTF usando o Microsoft Word e executa operações locais autorizadas |
+| Pacote local da extensão | Permite a instalação controlada sem Chrome Web Store |
+| Políticas do Chrome | Mantêm a extensão instalada e autorizam sua comunicação local |
+| Estado e logs administrativos | Registram a instalação e apoiam diagnóstico e reparo |
 
-A estação de destino precisa somente de:
+## 4. Fluxo de instalação
+
+```mermaid
+flowchart LR
+    A[Release privada] --> B[TI valida o SHA-256]
+    B --> C[Setup executado como administrador]
+    C --> D[Componentes copiados para a estação]
+    C --> E[Políticas do Chrome configuradas]
+    C --> F[Programa auxiliar registrado]
+    E --> G[Extensão disponível no Chrome]
+    F --> G
+    G --> H[Usuário trabalha no EGBANET]
+```
+
+A instalação inicial não depende de servidor de atualização nem da Chrome Web Store. O pacote da extensão é disponibilizado localmente na estação.
+
+## 5. Dependências da estação
+
+Necessárias:
 
 - Windows x64;
 - Google Chrome;
-- associação ao Active Directory;
+- vínculo com o domínio corporativo;
 - privilégio administrativo durante a instalação;
-- Word desktop para DOC e RTF automáticos.
+- Microsoft Word desktop somente para conversão automática de DOC e RTF.
 
-Não são necessários na estação:
+Não são necessárias para o usuário:
 
 - Node.js ou npm;
 - Git;
 - NSIS;
-- SDK ou Runtime .NET 8 previamente instalado;
-- acesso ao repositório de desenvolvimento;
-- Chrome Web Store.
+- SDK de desenvolvimento;
+- instalação prévia do .NET Runtime;
+- acesso ao repositório de código-fonte.
 
-## 4. Instalação da extensão
+O programa auxiliar é publicado com os componentes necessários para executar sem instalação separada do runtime.
 
-A extensão é instalada de forma gerenciada por políticas locais em HKLM:
+## 6. Identidade da extensão
+
+```text
+ID da extensão: chdfbekdjpecdajbpdelmhpemenoelmd
+Programa auxiliar: com.egba.regua_editorial.helper
+```
+
+O ID identifica a extensão para o Chrome e também define o espaço em que os cálculos são armazenados. Futuras atualizações devem manter a mesma chave institucional e o mesmo ID.
+
+Trocar o ID faz o Chrome tratar a atualização como outra extensão, com outro armazenamento local.
+
+## 7. Armazenamento dos cálculos
+
+Os cálculos são guardados no banco interno do Chrome, associado ao perfil do usuário e ao ID da extensão.
+
+Não existe banco de dados externo nesta entrega. Isso reduz dependências, mas exige cuidados:
+
+- usar sempre o mesmo perfil do Chrome;
+- evitar limpeza de dados do navegador;
+- exportar relatórios conforme a rotina operacional;
+- preservar o ID da extensão em atualizações;
+- executar remoções de forma controlada.
+
+## 8. Políticas do Chrome
+
+A instalação usa políticas locais do Windows:
 
 ```text
 HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist
@@ -57,14 +113,15 @@ HKLM\SOFTWARE\Policies\Google\Chrome\NativeMessagingAllowlist
 HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionSettings
 ```
 
-Identidade operacional:
+Elas têm três funções:
 
-- Extension ID: `chdfbekdjpecdajbpdelmhpemenoelmd`;
-- Native host: `com.egba.regua_editorial.helper`.
+- instalar a extensão de forma gerenciada;
+- apontar para o pacote local ou para um canal de atualização autorizado;
+- permitir a comunicação com o programa auxiliar do Windows.
 
-O bootstrap inicial usa um CRX incorporado e manifesto local dentro de `%ProgramData%`. Atualizações futuras podem migrar para HTTPS corporativo mantendo a mesma PEM e o mesmo ID.
+As políticas podem ser consultadas em `chrome://policy`.
 
-## 5. Diretórios instalados
+## 9. Diretórios instalados
 
 ```text
 %ProgramFiles%\EGBA\ReguaEditorial\
@@ -74,26 +131,44 @@ O bootstrap inicial usa um CRX incorporado e manifesto local dentro de `%Program
 %ProgramData%\EGBA\ReguaEditorial\Logs\
 ```
 
-## 6. Distribuição pelo GitHub
+| Diretório | Conteúdo |
+|---|---|
+| `ReguaEditorial` | scripts administrativos e arquivos do pacote |
+| `ReguaEditorialHelper` | programa auxiliar do Windows |
+| `extension-cache` | extensão e manifesto local de atualização |
+| `state` | estado usado para reparo e remoção segura |
+| `Logs` | registros técnicos da instalação e manutenção |
 
-A árvore Git contém somente documentação. O executável e seu hash são ativos de uma Release privada.
+## 10. Assinatura do piloto
 
-Estrutura recomendada da Release:
+A pré-release atual usa um certificado temporário de laboratório para assinar os componentes locais. O instalador adiciona o certificado público aos repositórios de confiança da estação.
 
-```text
-Tag: v1.0.0-pilot.1
-Título: Entrega 1 — Piloto operacional
-Ativos:
-├── ReguaEditorial-Entrega1-Setup-x64.exe
-└── ReguaEditorial-Entrega1-Setup-x64.exe.sha256
-```
+Consequências:
 
-## 7. Controles
+- o primeiro aviso do Windows pode apresentar **Editor desconhecido**;
+- a validação do SHA-256 é obrigatória;
+- a distribuição deve permanecer restrita ao piloto;
+- uma assinatura corporativa reconhecida é requisito para o canal estável;
+- a retirada do certificado ao final do piloto deve usar o thumbprint exato da Release.
 
-- Release privada e acesso restrito;
-- hash SHA-256 obrigatório;
-- mesma PEM em todas as atualizações;
-- nenhum segredo no repositório;
-- promoção de piloto para estável somente após homologação;
-- preservação do pacote anterior para rollback;
-- logs sem conteúdo documental.
+## 11. Atualizações
+
+A atualização deve preservar:
+
+- ID da extensão;
+- chave institucional de assinatura;
+- compatibilidade com o programa auxiliar;
+- registros locais;
+- versão anterior disponível para recuperação.
+
+O modelo futuro pode usar endereço HTTPS corporativo para distribuir atualizações, sem trocar o ID da extensão.
+
+## 12. Controles da distribuição
+
+- repositório e Release privados;
+- SHA-256 publicado com o instalador;
+- chave privada fora do repositório e do pacote;
+- promoção do piloto somente após homologação;
+- logs sem conteúdo documental;
+- pacote anterior preservado;
+- inventário de versões e estações mantido pela equipe responsável.
