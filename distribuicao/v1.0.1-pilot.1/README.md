@@ -1,52 +1,33 @@
-﻿# Régua Editorial SieDOE — Entrega 1.0.1
+# Pacote v1.0.1-pilot.1
 
-Extensão Chrome: **0.7.4**
+Esta pasta contém os binários versionados da Entrega 1.0.1 e seus hashes.
 
-Extension ID:
+## Qual instalador usar
 
-`chdfbekdjpecdajbpdelmhpemenoelmd`
+| Ambiente | Instalador |
+|---|---|
+| estação corporativa ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
+| laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
 
-## Instaladores
+Sempre valide o `.sha256` de mesmo nome antes de executar.
 
-### Ambiente corporativo / Active Directory
+> `HomologacaoLocal` é somente para laboratório. Não o utilize para rollout institucional.
 
-`ReguaEditorial-Entrega1-Corporativo-x64.exe`
+## Documentação oficial
 
-Usar nas estações corporativas ingressadas no domínio.
+Não duplique procedimentos nesta pasta. Use a documentação única do repositório:
 
-### Homologação local
-
-`ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe`
-
-Usar somente em laboratório ou homologação fora do Active Directory.
-
-## Antes de instalar
-
-Sempre valide o arquivo `.sha256` correspondente ao executável.
-
-## Documentação incluída
-
-1. `01-GUIA-DE-INSTALACAO.md`
-2. `02-GUIA-DE-HOMOLOGACAO.md`
-3. `03-GUIA-DE-USO.md`
-4. `04-REFERENCIA-TECNICA.md`
-5. `05-ESPECIFICACAO-DA-EXTENSAO.md`
-6. `06-DISTRIBUICAO-AD-GPO.md`
-7. `07-ATUALIZACAO-E-CONTINUIDADE.md`
-8. `08-SEGURANCA.md`
-
-## Implantação automatizada
-
-`.\scripts\Instalar-Corporativo-GPO.ps1`
-
-é destinado à equipe de TI para implantação por Startup Script/GPO ou ferramenta corporativa equivalente.
+- [Instalação corporativa](../../docs/instalacao/CORPORATIVO.md)
+- [Homologação local](../../docs/instalacao/HOMOLOGACAO-LOCAL.md)
+- [Distribuição AD/GPO](../../docs/instalacao/AD-GPO.md)
+- [Guia rápido de uso](../../docs/uso/GUIA-RAPIDO.md)
+- [Suporte](../../docs/uso/SUPORTE.md)
+- [Referência técnica](../../docs/tecnico/README.md)
+- [Motor editorial](../../docs/motor/ESPECIFICACAO.md)
+- [Qualidade/homologação](../../docs/qualidade/HOMOLOGACAO.md)
 
 ## Segurança
 
-Nunca distribuir junto com este pacote:
+Não coloque nesta pasta PEM/PFX/chaves privadas, credenciais, documentos de produção ou cópia do IndexedDB.
 
-- PEM privada da extensão;
-- PFX/P12/KEY;
-- senhas ou tokens;
-- arquivos de produção;
-- banco IndexedDB de usuários.
+Os `.exe` devem ser rastreados via Git LFS e também publicados como ativos da Release correspondente.
