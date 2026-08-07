@@ -8,9 +8,9 @@ param(
 
     [string]$Repository = 'guedesle/regua-municipios-a-vista',
 
-    [string]$Tag = 'v1.0.0-pilot.1',
+    [string]$Tag = 'v1.0.1-pilot.1',
 
-    [string]$Title = 'Entrega 1 — Piloto operacional',
+    [string]$Title = 'Entrega 1 — Piloto operacional 1.0.1',
 
     [switch]$ReplaceAssets
 )
@@ -21,7 +21,7 @@ Set-StrictMode -Version Latest
 $setup = [IO.Path]::GetFullPath((Resolve-Path $SetupPath).Path)
 $hashFile = [IO.Path]::GetFullPath((Resolve-Path $HashPath).Path)
 $notesPath = [IO.Path]::GetFullPath(
-    (Join-Path $PSScriptRoot '..\RELEASE-NOTES-v1.0.0-pilot.1.md'))
+    (Join-Path $PSScriptRoot '..\RELEASE-NOTES-v1.0.1-pilot.1.md'))
 
 if (-not (Test-Path $setup -PathType Leaf)) {
     throw 'SETUP_NOT_FOUND'
