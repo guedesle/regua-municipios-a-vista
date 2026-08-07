@@ -6,7 +6,7 @@
 
 </div>
 
-> **Piloto interno da EGBA.** Este repositório contém instaladores, documentação e scripts de distribuição. O código-fonte permanece no repositório de desenvolvimento.
+> **Piloto interno da EGBA.** Este repositório contém os materiais de distribuição, documentação e scripts. O código-fonte permanece no repositório de desenvolvimento.
 
 ## Comece aqui
 
@@ -30,7 +30,7 @@
 | estação corporativa ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
 | laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
 
-Os binários versionados ficam em [`distribuicao/v1.0.1-pilot.1/`](distribuicao/v1.0.1-pilot.1/). A Release correspondente continua sendo o canal formal de publicação.
+O pacote versionado fica em [`distribuicao/v1.0.1-pilot.1/`](distribuicao/v1.0.1-pilot.1/). Ele só deve ser usado como fonte de instalação quando os dois `.exe` e seus dois `.sha256` estiverem presentes.
 
 > Sempre valide o `.sha256` de mesmo nome. O instalador `HomologacaoLocal` não deve ser usado em rollout institucional.
 
@@ -47,7 +47,7 @@ Os binários versionados ficam em [`distribuicao/v1.0.1-pilot.1/`](distribuicao/
 | IndexedDB | schema `3` |
 | Extension ID | `chdfbekdjpecdajbpdelmhpemenoelmd` |
 
-## Em uma frase
+## O produto
 
 A extensão abre um painel no EGBANET, prepara o documento segundo as regras editoriais, mede e calcula a publicação, salva o resultado localmente e oferece consultas/relatórios. DOC/RTF usam o Helper Windows + Microsoft Word; DOCX é processado diretamente.
 
@@ -55,7 +55,7 @@ A extensão abre um painel no EGBANET, prepara o documento segundo as regras edi
 
 ```text
 README.md          # entrada única
-distribuicao/      # binários versionados + hashes
+distribuicao/      # pacotes versionados e hashes
 docs/              # documentação por tarefa
 release/           # notas de release
 scripts/           # implantação e publicação
