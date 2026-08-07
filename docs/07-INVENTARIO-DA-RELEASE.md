@@ -1,95 +1,138 @@
-# Inventário da Release — Entrega 1
+# Inventário da Release — Entrega 1.0.1
 
-Este documento registra a composição da entrega e os dados necessários para auditoria e suporte.
+Este documento registra a composição da entrega e os dados necessários para auditoria, suporte e rastreabilidade.
 
 ## 1. Identificação
 
 | Campo | Valor |
 |---|---|
 | Produto | Régua Editorial SieDOE — Municípios à Vista |
-| Release | `v1.0.0-pilot.1` |
+| Release | `v1.0.1-pilot.1` |
 | Canal | `pilot` |
-| Data inicial da publicação | 1º de agosto de 2026 |
-| Instalador | `1.0.0` |
-| Extensão | `0.7.3` |
-| Programa auxiliar do Windows | `0.1.4` |
-| Comunicação local | `1.2.0` |
-| Estrutura do armazenamento local | `3` |
-| ID da extensão | `chdfbekdjpecdajbpdelmhpemenoelmd` |
-| Identificador do programa auxiliar | `com.egba.regua_editorial.helper` |
+| Data da revisão | 7 de agosto de 2026 |
+| Instalador | `1.0.1` |
+| Extensão | `0.7.4` |
+| Regras editoriais | `municipios-editorial-rules@1.3.0` |
+| Native Helper | `0.1.4` |
+| Contrato Native Messaging | `1.2.0` |
+| IndexedDB/schema | `3` |
+| Extension ID | `chdfbekdjpecdajbpdelmhpemenoelmd` |
+| Native host | `com.egba.regua_editorial.helper` |
 | Repositório de distribuição | `guedesle/regua-municipios-a-vista` |
 | Repositório de desenvolvimento | `guedesle/calculadora-editorial` |
 
-## 2. Arquivos publicados
+## 2. Ativos da Release
 
-| Arquivo | Finalidade | Situação |
+| Arquivo | Finalidade | Requisito ambiental |
 |---|---|---|
-| `ReguaEditorial-Entrega1-Setup-x64.exe` | instalação completa em Windows x64 | publicado na Release |
-| `ReguaEditorial-Entrega1-Setup-x64.exe.sha256` | verificação da integridade do instalador | publicado na Release |
+| `ReguaEditorial-Entrega1-Corporativo-x64.exe` | implantação institucional | estação no Active Directory |
+| `ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256` | integridade do instalador corporativo | — |
+| `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` | laboratório fora do domínio | Windows x64 + Chrome |
+| `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256` | integridade do instalador local | — |
 
-## 3. Registro pós-publicação
+Os dois executáveis devem possuir SHA-256 diferentes.
 
-Os campos abaixo devem ser completados pela equipe que publicou e validou os ativos. Enquanto algum campo permanecer pendente, o inventário documental não está encerrado.
+## 3. Estado de publicação
 
-| Campo | Situação atual |
-|---|---|
-| SHA-256 do instalador | **Pendente de transcrição do arquivo `.sha256`** |
-| Tamanho do instalador | **Pendente de registro** |
-| Responsável pelo upload | **Pendente de registro** |
-| Resultado da conferência após novo download | **Pendente de registro** |
-| Thumbprint do certificado temporário | **Pendente de registro** |
-| Estações homologadas | **Pendente após homologação** |
-| Aceite funcional da GERDO | **Pendente após homologação** |
-| Aceite técnico da TI | **Pendente após homologação** |
+Preencha esta seção somente com dados obtidos dos artefatos finais que passaram pelo QA e foram efetivamente publicados.
 
-> [!IMPORTANT]
-> Esses itens são pendências documentais, não devem ser substituídos por estimativas. Copie os valores diretamente dos arquivos e das evidências da homologação.
+| Campo | Corporativo | Homologação local |
+|---|---|---|
+| SHA-256 | **preencher após publicação** | **preencher após publicação** |
+| Tamanho em bytes | **preencher** | **preencher** |
+| Tamanho em MiB | **preencher** | **preencher** |
+| Assinatura | **preencher** | **preencher** |
+| Thumbprint | **preencher do manifesto final** | **preencher do manifesto final** |
+| Download pós-publicação validado | **pendente** | **pendente** |
 
-## 4. Obter tamanho e SHA-256
+Não copie hashes de builds descartados ou intermediários.
 
-Depois de baixar novamente os ativos da Release:
+## 4. Gate técnico anterior à publicação
+
+A publicação exige evidência de:
+
+```text
+BOTH_INSTALLERS_READY
+BOTH_ARTIFACTS_QA_PASSED
+```
+
+O QA deve confirmar, no mínimo:
+
+- Setup `1.0.1`;
+- extensão `0.7.4`;
+- regras `1.3.0`;
+- Extension ID operacional;
+- hashes coerentes;
+- assinaturas aceitáveis no contexto do piloto;
+- dois instaladores distintos;
+- modo de homologação local presente somente no artefato correspondente;
+- scripts runtime compatíveis com Windows PowerShell 5.1/UTF-8.
+
+## 5. Registrar tamanho e SHA-256 depois do download
 
 ```powershell
-$Setup = '.\ReguaEditorial-Entrega1-Setup-x64.exe'
-$HashFile = '.\ReguaEditorial-Entrega1-Setup-x64.exe.sha256'
+$Files = @(
+  '.\ReguaEditorial-Entrega1-Corporativo-x64.exe',
+  '.\ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe'
+)
 
-$Actual = (Get-FileHash $Setup -Algorithm SHA256).Hash.ToLowerInvariant()
-$Expected = ((Get-Content $HashFile -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
-$SizeBytes = (Get-Item $Setup).Length
-$SizeMB = [math]::Round($SizeBytes / 1MB, 2)
+$Files | ForEach-Object {
+  $Setup = $_
+  $HashFile = "$Setup.sha256"
+  $Actual = (Get-FileHash $Setup -Algorithm SHA256).Hash.ToLowerInvariant()
+  $Expected = ((Get-Content $HashFile -Raw).Trim() -split '\s+')[0].ToLowerInvariant()
+  if ($Actual -ne $Expected) { throw "HASH_DIVERGENTE:$Setup" }
 
-if ($Actual -ne $Expected) {
-    throw "RELEASE_HASH_DIVERGENTE"
-}
-
-[pscustomobject]@{
+  $Item = Get-Item $Setup
+  [pscustomobject]@{
+    File = $Item.Name
     Sha256 = $Actual
-    SizeBytes = $SizeBytes
-    SizeMB = $SizeMB
+    SizeBytes = $Item.Length
+    SizeMiB = [math]::Round($Item.Length / 1MB, 2)
+  }
 }
 ```
 
-Transcreva o resultado na seção anterior e registre o responsável pela conferência.
+## 6. Manifesto instalado
 
-## 5. Identificar o certificado do piloto
-
-O manifesto instalado registra o thumbprint utilizado na geração do pacote:
+Cada instalação contém:
 
 ```text
 %ProgramFiles%\EGBA\ReguaEditorial\release-manifest.json
 ```
 
-Leia o valor registrado:
+O manifesto é a fonte técnica para:
+
+- versão;
+- Extension ID;
+- baseline de build;
+- assinatura;
+- thumbprint;
+- validade do certificado;
+- modo de bootstrap;
+- indicação de artefato de homologação local.
+
+Exemplo:
 
 ```powershell
 $ManifestPath = "$env:ProgramFiles\EGBA\ReguaEditorial\release-manifest.json"
 $Manifest = Get-Content $ManifestPath -Raw | ConvertFrom-Json
 
-$Manifest |
-  Select-Object signer, certificateThumbprint, certificateNotAfter, signingMode
+$Manifest | Select-Object `
+  setupVersion,
+  extensionVersion,
+  extensionId,
+  baselineCommit,
+  signer,
+  certificateThumbprint,
+  certificateNotAfter,
+  signingMode,
+  localHomologationArtifact
 ```
 
-Depois liste os certificados presentes no computador, sem removê-los:
+## 7. Certificado do piloto
+
+Não documente o thumbprint por estimativa. Leia-o do `release-manifest.json` do artefato final e confirme nos repositórios:
 
 ```powershell
 Get-ChildItem Cert:\LocalMachine\Root, Cert:\LocalMachine\TrustedPublisher |
@@ -97,25 +140,38 @@ Get-ChildItem Cert:\LocalMachine\Root, Cert:\LocalMachine\TrustedPublisher |
   Select-Object Subject, Thumbprint, NotAfter, PSParentPath
 ```
 
-O thumbprint do manifesto e o do certificado instalado devem coincidir.
+## 8. Materiais proibidos
 
-## 6. Materiais proibidos
+Não versionar nem anexar à Release:
 
-A Release e este repositório não podem conter:
-
-- chave privada PEM;
-- PFX, P12, KEY ou senha de certificado;
-- pastas intermediárias como `artifacts`, `staging`, `helper-build`, `extension-build` ou `crx-test`;
+- PEM/PFX/P12/KEY ou outras chaves privadas;
+- senha ou token;
+- `artifacts`, `staging`, `helper-build`, `extension-build` ou `node_modules`;
 - código-fonte da aplicação;
-- documentos ou dados de produção;
-- credenciais, cookies ou tokens.
+- documentos de produção;
+- dumps de perfil Chrome/IndexedDB;
+- logs com dados operacionais desnecessários.
 
-## 7. Encerramento do inventário
+## 9. Evidências da implantação
 
-O inventário é considerado completo quando:
+Registrar separadamente:
 
-- tamanho e SHA-256 estiverem registrados;
-- novo download da Release tiver sido validado;
-- thumbprint do certificado estiver registrado;
-- estações homologadas estiverem relacionadas;
-- aceites funcional e técnico estiverem registrados.
+- responsável pelo upload;
+- data/hora;
+- estação ou lote de homologação;
+- resultado do download de conferência;
+- aceite técnico;
+- aceite funcional;
+- lote/OU/grupo liberado para implantação;
+- incidentes ou ressalvas.
+
+## 10. Encerramento
+
+O inventário é considerado encerrado quando:
+
+- os quatro ativos estiverem publicados;
+- hashes e tamanhos forem transcritos dos arquivos finais;
+- download pós-publicação tiver sido validado;
+- assinatura/thumbprint forem registrados;
+- homologação técnica e funcional estiverem aprovadas;
+- a decisão de ampliar o piloto estiver registrada.
