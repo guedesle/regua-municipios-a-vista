@@ -1,137 +1,166 @@
-# Plano de reversão (rollback)
+# Plano de reversão (rollback) — Entrega 1.0.1
 
-Este plano orienta a interrupção, o reparo ou a retirada controlada da Régua Editorial quando uma versão apresenta falha relevante.
+Este plano orienta contenção, reparo, substituição ou retirada controlada da Régua Editorial quando uma versão apresenta falha relevante.
 
 ## 1. Princípio de segurança
 
-Os cálculos ficam armazenados no perfil do Chrome. Por isso, a reversão deve preservar:
+Os cálculos ficam armazenados no perfil do Chrome. A reversão deve preservar:
 
 - o mesmo perfil do usuário;
-- o ID da extensão `chdfbekdjpecdajbpdelmhpemenoelmd`;
-- os registros locais;
-- os arquivos exportados e as evidências necessárias.
+- o Extension ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
+- o IndexedDB e registros locais;
+- arquivos exportados;
+- evidências técnicas necessárias.
 
 > [!WARNING]
-> Remover a política da extensão, excluir a extensão ou limpar o perfil do Chrome pode eliminar os cálculos locais. Essas ações exigem exportação prévia ou autorização expressa de descarte.
+> Remover a política da extensão, excluir a extensão ou limpar o perfil do Chrome pode tornar os cálculos inacessíveis. Essas ações exigem exportação prévia ou autorização expressa de descarte.
 
-## 2. Quando iniciar a reversão
+## 2. Artefatos envolvidos
 
-Avalie contenção ou reversão diante de:
+```text
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
+```
 
-- perda ou alteração de cálculos;
+O instalador de homologação local não deve ser promovido como substituto do corporativo. Em incidente de rollout institucional, trabalhe sobre o artefato corporativo e sobre a Release publicada.
+
+## 3. Quando iniciar contenção ou reversão
+
+Avalie rollback diante de:
+
+- perda/alteração de cálculos;
 - medição ou preço incorreto;
-- ID da extensão diferente do previsto;
-- incompatibilidade entre a extensão e o programa auxiliar;
+- Extension ID divergente;
+- incompatibilidade extensão/Helper;
 - execução de macro;
-- sobrescrita do documento original;
+- sobrescrita de original;
 - hash ou assinatura divergente;
+- política Chrome aplicada incorretamente;
 - exposição de dados;
-- falha generalizada de instalação ou atualização.
+- falha generalizada de instalação/atualização;
+- regressão funcional em múltiplas estações.
 
-## 3. Resposta por nível
+## 4. Nível 1 — suspender novas instalações
 
-### Nível 1 — Suspender novas instalações
+1. interrompa o rollout no grupo/OU seguinte;
+2. preserve a Release e os quatro ativos;
+3. registre hashes, versões e lote afetado;
+4. preserve logs e `state` das estações representativas;
+5. não remova a extensão nem limpe o perfil;
+6. defina correção, reparo ou substituição.
 
-Use quando a causa ainda está em análise.
+## 5. Nível 2 — reparar a estação
 
-1. interrompa a distribuição da Release afetada;
-2. não instale em novas estações;
-3. preserve o instalador, o `.sha256` e os logs;
-4. registre versões e estações afetadas;
-5. defina se haverá correção, reparo ou reversão.
+Use quando a versão é considerada válida e a falha está concentrada em instalação/política/Helper.
 
-### Nível 2 — Reparar a instalação
-
-Use quando a versão é considerada válida, mas uma estação está incompleta ou corrompida.
-
-1. confirme a quantidade de cálculos existentes;
+1. registre a quantidade de cálculos;
 2. feche o Chrome;
-3. execute o reparo pelo Windows;
-4. valide a extensão e o programa auxiliar;
+3. execute o reparo;
+4. valide Helper e políticas;
 5. reabra o Chrome;
-6. confirme DOCX, salvamento e relatórios;
+6. confirme DOCX, cálculo, consulta e relatórios;
 7. confirme que os registros anteriores permanecem disponíveis.
 
-### Nível 3 — Remover somente o programa auxiliar
+```powershell
+& "$env:ProgramFiles\EGBA\ReguaEditorial\Repair-ReguaEditorial.ps1" `
+  -PackageRoot "$env:ProgramFiles\EGBA\ReguaEditorial"
+```
 
-Use quando o problema está concentrado na conversão de DOC e RTF.
+## 6. Nível 3 — conter falha do Helper
 
-A remoção padrão do instalador:
+Se o problema estiver restrito a DOC/RTF:
 
-- retira o programa auxiliar e sua autorização de comunicação;
-- preserva a extensão, a política de instalação e os cálculos;
-- mantém potencialmente DOCX, consultas e relatórios;
-- deixa a conversão automática de DOC e RTF indisponível.
+- suspenda esses formatos;
+- mantenha DOCX, consultas e relatórios quando validados;
+- diagnostique o Helper/Word;
+- evite remover a extensão como ação inicial.
 
-Depois da remoção, feche e reabra o Chrome e valide os fluxos que permanecerão em uso.
+A remoção padrão do Setup pode retirar o Helper sem necessariamente exigir descarte do IndexedDB.
 
-### Nível 4 — Substituir a versão da extensão
+## 7. Nível 4 — substituir a extensão por versão de reversão
 
-O Chrome pode impedir retorno direto para um número de versão inferior. Nessa situação, publique uma versão numericamente superior contendo o código da última versão aprovada e usando a mesma identidade da extensão.
+Chrome não garante downgrade simples para número inferior. A estratégia recomendada é publicar uma **versão numericamente superior** contendo o comportamento da última versão aprovada, preservando a mesma identidade.
 
 Exemplo:
 
 ```text
 versão com incidente: 0.8.0
-versão de reversão:   0.8.1 com o comportamento aprovado da 0.7.3
+versão de reversão:   0.8.1 contendo o comportamento aprovado da 0.7.4
 ```
 
-A nova versão deve passar pela homologação antes da ampliação.
+Obrigatório:
 
-### Nível 5 — Remoção integral
+- mesma PEM;
+- mesmo Extension ID;
+- compatibilidade com o schema local;
+- novo QA e nova homologação;
+- documentação explícita de que se trata de reversão funcional.
+
+## 8. Nível 5 — remoção integral
 
 Use somente como último recurso.
 
 Antes de remover também a extensão:
 
-1. exporte JSON e CSV, quando possível;
-2. registre a quantidade de cálculos e os totais;
-3. confirme o perfil do Chrome utilizado;
-4. obtenha autorização expressa da GERDO e da TI;
-5. registre a decisão de preservar ou descartar os dados;
-6. execute a remoção técnica controlada.
+1. exporte CSV/JSON quando possível;
+2. registre quantidade e período dos cálculos;
+3. confirme o perfil Chrome;
+4. obtenha autorização expressa GERDO/TI;
+5. registre decisão de preservar ou descartar;
+6. execute o procedimento administrativo controlado.
 
-A confirmação técnica exigida pelo script é:
+Confirmação técnica exigida pelo fluxo de remoção integral:
 
 ```text
 EXPORTED_OR_DISCARD_AUTHORIZED
 ```
 
-## 4. Conferência dos dados
+## 9. Conferência antes/depois
 
-Antes e depois da ação:
+Registre:
 
-- registre a quantidade de cálculos;
-- registre o período coberto pelos registros;
-- compare os totais agregados;
-- mantenha o mesmo perfil do Chrome;
-- confirme o mesmo ID da extensão;
-- não use limpeza de dados do navegador.
+- Extension ID;
+- versão instalada;
+- quantidade de registros;
+- período coberto;
+- totais agregados;
+- resultado de consulta após reinício do Chrome.
 
-Qualquer divergência deve ser tratada como incidente de dados e impede a retomada.
+Qualquer divergência de dados impede a retomada do rollout.
 
-## 5. Certificado temporário do piloto
+## 10. Políticas Chrome
 
-O instalador piloto adiciona um certificado público temporário aos repositórios de confiança do Windows. A remoção padrão não deve ser presumida como remoção desse certificado.
+Antes de alterar manualmente o Registro, consulte:
 
-Antes de retirar o certificado:
+```text
+%ProgramData%\EGBA\ReguaEditorial\state\chrome-policy.json
+```
 
-1. identifique o thumbprint usado pela Release;
-2. confirme que ele pertence somente à Régua Editorial;
-3. confirme que nenhuma instalação ativa depende dele;
-4. registre a autorização da TI;
-5. remova-o de forma controlada dos repositórios **Trusted Root** e **Trusted Publishers**.
+O instalador registra os slots e valores anteriores usados pela Régua. Não apague `ExtensionInstallForcelist`, `NativeMessagingAllowlist` ou `ExtensionSettings` integralmente: podem existir políticas de outras aplicações.
 
-Não remova certificados apenas pelo nome do emissor, pois pode haver mais de um certificado com identificação semelhante.
+## 11. Certificado temporário do piloto
 
-## 6. Retomada
+A remoção padrão não implica retirada automática do certificado.
 
-O uso pode ser retomado quando:
+Antes de removê-lo:
 
-- a versão aprovada estiver operando;
-- os cálculos tiverem sido conferidos;
-- os testes críticos forem aprovados;
-- o impacto e a causa estiverem registrados;
-- GERDO e TI autorizarem a retomada.
+1. leia o thumbprint em `release-manifest.json`;
+2. confirme que nenhuma instalação ativa depende dele;
+3. confirme os repositórios Root e TrustedPublisher;
+4. obtenha autorização da TI;
+5. remova pelo thumbprint exato.
 
-Consulte a [Referência técnica](09-REFERENCIA-TECNICA.md) para comandos e locais de diagnóstico.
+Nunca remova certificado apenas pelo Subject.
+
+## 12. Retomada
+
+O rollout pode ser retomado quando:
+
+- a causa estiver compreendida ou mitigada;
+- a versão aprovada estiver em operação;
+- dados locais tiverem sido conferidos;
+- testes críticos forem aprovados;
+- QA/release estiverem rastreáveis;
+- GERDO e TI autorizarem a próxima onda.
+
+Consulte também [09 — Referência técnica](09-REFERENCIA-TECNICA.md) e [13 — Atualização e continuidade](13-ATUALIZACAO-E-CONTINUIDADE.md).
