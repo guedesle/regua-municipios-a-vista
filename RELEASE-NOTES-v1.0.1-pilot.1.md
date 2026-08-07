@@ -1,6 +1,6 @@
 # Entrega 1 — Piloto operacional 1.0.1
 
-Distribuição homologada da **Régua Editorial SieDOE — Municípios à Vista** para instalação controlada em estações autorizadas da EGBA.
+Distribuição homologada da **Régua Editorial SieDOE — Municípios à Vista**.
 
 ## Alteração desta revisão
 
@@ -15,41 +15,66 @@ A extensão passa para a versão `0.7.4`, com regras editoriais `municipios-edit
 
 A mudança de entrelinha altera a geometria editorial. Altura, cm/cl e valor total podem variar em relação à versão 0.7.3 exclusivamente por esse efeito geométrico.
 
-## Arquivos para instalação
+## Instaladores disponíveis
 
-Baixe os dois arquivos da Release:
+Esta pré-release publica **dois instaladores explicitamente identificados no nome**.
+
+### 1. Instalação corporativa
 
 ```text
-ReguaEditorial-Entrega1-Setup-x64.exe
-ReguaEditorial-Entrega1-Setup-x64.exe.sha256
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256
 ```
 
-O arquivo `.sha256` deve ser usado para validar a integridade do instalador antes da execução.
+Use este instalador nas estações corporativas gerenciadas. Ele mantém o gate de gerenciamento e exige que a estação seja reconhecida por um dos mecanismos corporativos aceitos, incluindo Active Directory.
+
+### 2. Homologação local
+
+```text
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256
+```
+
+Use este instalador somente para homologação e testes em estação fora do ambiente corporativo gerenciado. Ele ignora exclusivamente o gate de AD/gerenciamento corporativo durante a instalação local.
+
+Continuam obrigatórias neste instalador de homologação:
+
+- integridade por SHA-256;
+- assinaturas dos componentes;
+- validação de versão;
+- instalação e probe do Native Helper;
+- aplicação da política da extensão no Chrome;
+- validações de arquitetura e payload;
+- Extension ID operacional definitivo.
+
+O instalador de homologação local **não substitui** o instalador corporativo para implantação institucional.
 
 ## Instalação resumida
 
-1. baixe o instalador e o arquivo SHA-256;
-2. valide o hash;
-3. feche completamente o Chrome;
-4. execute o instalador como administrador;
-5. reabra o Chrome;
-6. confirme a extensão e a versão instalada;
-7. execute a validação funcional pós-instalação.
+1. escolha o instalador adequado ao tipo de estação;
+2. baixe o `.exe` e o `.sha256` de mesmo nome;
+3. valide o SHA-256;
+4. feche completamente o Chrome;
+5. execute o instalador como administrador;
+6. reabra o Chrome;
+7. confirme a extensão e a versão instalada;
+8. execute a validação funcional pós-instalação.
 
-## Requisitos
+## Requisitos comuns
 
 - Windows x64;
 - Google Chrome;
-- estação vinculada ao domínio corporativo;
 - credencial administrativa durante a instalação;
 - Microsoft Word desktop somente para conversão automática de DOC e RTF.
 
 DOCX, cálculos, consultas e relatórios não dependem do Word.
 
+O instalador **corporativo** requer ainda ambiente corporativo gerenciado. O instalador de **homologação local** existe justamente para estações de teste que não atendam a esse gate.
+
 ## Assinatura do piloto
 
 > [!WARNING]
-> O instalador utiliza certificado temporário de laboratório. O primeiro aviso do Windows pode apresentar **Editor desconhecido**. Execute somente depois de validar o SHA-256 e confirmar a origem desta Release privada.
+> Os instaladores desta pré-release utilizam certificado temporário de laboratório. O primeiro aviso do Windows pode apresentar **Editor desconhecido** até o certificado ser confiado na estação. Execute somente depois de validar o SHA-256 e confirmar a origem da Release.
 
 A distribuição estável continua dependente de assinatura corporativa reconhecida.
 
@@ -66,10 +91,10 @@ A distribuição estável continua dependente de assinatura corporativa reconhec
 | Canal | `pilot` |
 
 ```text
-ID da extensão: kinmhabaogefkaoefhponolanmjpcikp
+ID operacional da extensão: chdfbekdjpecdajbpdelmhpemenoelmd
 Programa auxiliar: com.egba.regua_editorial.helper
 ```
 
 ## Situação
 
-A mudança editorial da versão 0.7.4 foi homologada em 07/08/2026. Esta Release permanece classificada como **pré-release de piloto interno** para implantação controlada.
+A mudança editorial da versão 0.7.4 foi homologada em 07/08/2026. Esta Release permanece classificada como **pré-release de piloto interno**.
