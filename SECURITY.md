@@ -1,116 +1,257 @@
-# Segurança da distribuição
+# Segurança da distribuição — Régua Editorial SieDOE
 
-Esta política orienta a publicação, a instalação e o suporte da Régua Editorial no ambiente interno da EGBA.
+Esta política orienta publicação, implantação, suporte e resposta a incidentes da Régua Editorial em ambiente interno da EGBA.
 
 ## 1. Escopo
 
-O repositório contém:
+Este repositório contém somente materiais de distribuição:
 
-- documentação operacional e técnica;
+- instaladores como ativos de Releases privadas;
+- arquivos `.sha256`;
 - notas e inventários de entrega;
-- instaladores publicados em Releases privadas;
-- scripts administrativos de publicação da Release.
+- documentação operacional/técnica;
+- scripts administrativos de publicação.
 
-O código-fonte da aplicação permanece no repositório de desenvolvimento.
+Código-fonte, chaves e ferramentas de build permanecem no repositório de desenvolvimento ou em cofres apropriados.
 
-## 2. Materiais proibidos
-
-Nunca versione, anexe a uma Release ou publique em issues:
-
-- chave privada PEM da extensão;
-- PFX, P12, KEY ou senha de certificado;
-- cookies, tokens, senhas ou outras credenciais;
-- documentos DOCX, DOC ou RTF de produção;
-- conteúdo textual de matérias;
-- exportações com dados reais sem autorização;
-- logs com protocolo, cliente, ID de matéria ou caminho documental identificável;
-- cópia integral do armazenamento local do Chrome.
-
-Use arquivos sintéticos e evidências sanitizadas sempre que possível.
-
-## 3. Instalador e integridade
-
-O instalador deve ser publicado somente como ativo de uma Release privada, acompanhado do arquivo `.sha256`.
-
-Antes de instalar:
-
-1. baixe os dois arquivos da Release oficial;
-2. recalcule o SHA-256;
-3. compare com o valor publicado;
-4. interrompa a instalação diante de qualquer divergência.
-
-Não mantenha o executável na árvore Git.
-
-## 4. Certificado temporário do piloto
-
-A pré-release atual usa certificado autossinado de laboratório. Durante a instalação, a parte pública é adicionada aos repositórios de confiança do computador para validar os componentes locais.
-
-Riscos e controles:
-
-- o primeiro UAC pode mostrar **Editor desconhecido**;
-- somente o SHA-256 validado e a origem oficial autorizam a execução;
-- o certificado deve ser identificado e inventariado pelo thumbprint;
-- a remoção padrão da aplicação não implica retirada automática do certificado;
-- a retirada exige confirmação de que nenhuma instalação ativa depende dele;
-- o canal estável exige assinatura corporativa reconhecida, sem depender deste mecanismo temporário.
-
-A chave privada do certificado de laboratório não deve ser distribuída junto com o instalador.
-
-## 5. Identidade da extensão
+## 2. Identidade operacional
 
 ```text
-ID da extensão: chdfbekdjpecdajbpdelmhpemenoelmd
-Programa auxiliar: com.egba.regua_editorial.helper
+Extension ID: chdfbekdjpecdajbpdelmhpemenoelmd
+Native host:  com.egba.regua_editorial.helper
 ```
 
-A mesma chave institucional da extensão deve ser preservada em atualizações. Qualquer divergência de ID interrompe a distribuição, porque o Chrome passa a tratar o pacote como outra extensão e outro espaço de dados.
+A mesma chave privada institucional da extensão deve ser preservada em todas as atualizações desta identidade. Ela **nunca** deve ser versionada ou anexada à Release.
 
-## 6. Proteção dos cálculos
+A troca do Extension ID é ação excepcional porque afeta:
 
-Os cálculos ficam no perfil do Chrome do operador.
+- atualização da extensão;
+- autorização Native Messaging;
+- origem associada ao IndexedDB;
+- continuidade dos cálculos existentes.
 
-Para reduzir risco de perda:
+## 3. Artefatos permitidos na Release
 
-- não limpar dados do navegador;
-- não trocar de perfil durante a operação;
-- não remover a extensão sem avaliação prévia;
-- exportar relatórios conforme a rotina definida pela gestão;
-- registrar quantidade e totais antes de reparos ou reversões invasivas.
+```text
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256
+```
 
-A remoção integral exige exportação prévia ou autorização expressa para descarte.
+O instalador de homologação local deve ser explicitamente identificado e não pode ser usado como pacote institucional de produção.
 
-## 7. Conversão de documentos
+## 4. Materiais proibidos
 
-A conversão de DOC e RTF deve:
+Nunca versione, anexe ou publique em issues:
 
-- operar sobre cópia do arquivo;
+- PEM/PFX/P12/KEY ou outra chave privada;
+- senha de certificado;
+- cookies, tokens, senhas ou credenciais;
+- documentos DOCX/DOC/RTF de produção;
+- conteúdo textual de matérias;
+- dumps de IndexedDB/perfil Chrome;
+- exportações reais sem autorização;
+- logs com dados operacionais desnecessários;
+- `node_modules`, staging ou pastas de build.
+
+Use dados sintéticos e evidências sanitizadas.
+
+## 5. Integridade dos instaladores
+
+Cada `.exe` deve possuir `.sha256` próprio. Antes de executar:
+
+1. confirme origem na Release privada oficial;
+2. valide o SHA-256;
+3. confirme o nome do artefato;
+4. confirme o tipo de estação;
+5. interrompa diante de divergência.
+
+Os dois instaladores devem ter hashes diferentes.
+
+## 6. Assinatura do piloto
+
+A linha `pilot` utiliza certificado temporário de laboratório.
+
+Controles:
+
+- componentes internos assinados;
+- Setup assinado;
+- certificado público incorporado ao pacote;
+- parte pública adicionada a Root/TrustedPublisher durante a instalação;
+- thumbprint registrado no manifesto;
+- chave privada nunca distribuída;
+- SHA-256 obrigatório.
+
+O primeiro UAC pode mostrar **Editor desconhecido** antes da confiança do certificado.
+
+A promoção a `stable` exige assinatura corporativa reconhecida e nova homologação da cadeia completa.
+
+## 7. Permissões da extensão
+
+Manifest V3 declara:
+
+```text
+sidePanel
+activeTab
+tabs
+downloads
+downloads.open
+storage
+nativeMessaging
+```
+
+Host permission restrita a:
+
+```text
+https://egbanet.egba.ba.gov.br/*
+```
+
+Content scripts restritos às páginas de matéria:
+
+```text
+/admin/materias/edit/*
+/admin/materias/edicao_restrita/*
+```
+
+Qualquer ampliação de host permissions ou permissões Chrome deve passar por revisão de segurança e nova documentação.
+
+## 8. Native Messaging
+
+O native host aceita somente:
+
+```text
+chrome-extension://chdfbekdjpecdajbpdelmhpemenoelmd/
+```
+
+O manifesto fica sob Program Files e o registro é por máquina.
+
+Alterações em `allowed_origins`, nome do host, protocolo ou escopo de instalação exigem revisão de segurança.
+
+## 9. Políticas Chrome
+
+A Régua utiliza:
+
+```text
+ExtensionInstallForcelist
+NativeMessagingAllowlist
+ExtensionSettings
+```
+
+O script deve preservar entradas de outras aplicações. Não use limpeza indiscriminada das chaves `HKLM\SOFTWARE\Policies\Google\Chrome` como procedimento de suporte.
+
+Para rollback, use o estado registrado em:
+
+```text
+%ProgramData%\EGBA\ReguaEditorial\state\chrome-policy.json
+```
+
+## 10. Proteção dos cálculos
+
+Os cálculos ficam no IndexedDB do perfil Chrome.
+
+Controles:
+
+- usar o mesmo perfil operacional;
+- não limpar dados do navegador sem procedimento;
+- não remover a extensão como troubleshooting rotineiro;
+- exportar CSV/JSON conforme rotina definida;
+- registrar quantidade/totais antes de ações invasivas;
+- preservar Extension ID em atualizações.
+
+A remoção integral exige exportação prévia ou autorização expressa de descarte.
+
+## 11. Conversão de documentos
+
+DOC/RTF utilizam Microsoft Word por meio do Native Helper.
+
+Requisitos de segurança do fluxo:
+
+- trabalhar sobre material temporário/cópia;
 - preservar o original;
-- abrir o documento como somente leitura;
+- abrir como somente leitura;
 - desabilitar macros;
-- usar pasta de trabalho controlada;
-- não registrar conteúdo documental em logs.
+- validar o DOCX produzido;
+- remover temporários ao final;
+- não registrar conteúdo documental nos logs.
 
-Qualquer sobrescrita do original ou execução de macro deve ser tratada como incidente crítico.
+Sobrescrita do original ou execução de macro é incidente crítico.
 
-## 8. Evidências e logs
+## 12. Logs e evidências
 
-Antes de compartilhar evidências:
+Local:
 
-- remova nomes de clientes e protocolos reais;
-- não inclua conteúdo do documento;
-- não inclua credenciais ou identificadores de sessão;
-- limite o material a versões, horários, códigos de erro e resultados técnicos necessários.
+```text
+%ProgramData%\EGBA\ReguaEditorial\Logs\
+```
 
-## 9. Resposta a incidentes
+Podem conter:
 
-Em caso de suspeita de comprometimento da chave, alteração do instalador, execução inesperada, perda de dados ou distribuição não autorizada:
+- versões;
+- horários;
+- códigos de erro;
+- resultado do probe;
+- estado de instalação;
+- hashes e informações técnicas necessárias.
+
+Não devem conter:
+
+- conteúdo de matéria;
+- documento de produção;
+- cookie/token/senha;
+- dump integral de cálculo;
+- dados pessoais ou operacionais desnecessários.
+
+## 13. Segregação dos dois instaladores
+
+### Corporativo
+
+- exige estação no Active Directory;
+- destinado a implantação institucional;
+- não deve possuir override de ambiente local.
+
+### Homologação local
+
+- destinado apenas a laboratório;
+- pode operar fora do AD;
+- mantém assinatura, integridade, Helper e políticas;
+- deve ser mantido explicitamente identificado no nome e nas notas da Release.
+
+## 14. Distribuição em AD/GPO
+
+Para implantação em massa:
+
+- usar grupo/OU piloto;
+- restringir acesso ao compartilhamento de distribuição;
+- validar hash antes da execução;
+- executar como SYSTEM/administrador;
+- expandir em ondas;
+- manter pacote anterior disponível;
+- não armazenar chaves privadas em SYSVOL ou compartilhamento de software.
+
+Consulte [Distribuição corporativa AD/GPO](docs/12-DISTRIBUICAO-CORPORATIVA-AD-GPO.md).
+
+## 15. Resposta a incidentes
+
+Em suspeita de comprometimento de chave, alteração do instalador, execução inesperada, perda de dados ou distribuição indevida:
 
 1. interrompa novas instalações;
-2. restrinja a Release afetada;
-3. preserve instalador, `.sha256`, logs e identificação das estações;
-4. não apague dados ou evidências antes da análise;
-5. comunique GERDO, TI e Segurança da Informação;
-6. avalie reparo, reversão ou retirada controlada;
-7. só retome após nova validação e autorização.
+2. suspenda a Release afetada para novos usos;
+3. preserve `.exe`, `.sha256`, manifesto, logs e estado;
+4. identifique lote/estações afetadas;
+5. não apague evidências;
+6. comunique GERDO, TI e Segurança da Informação;
+7. avalie reparo, reversão ou rotação de credenciais/chaves;
+8. retome somente após nova validação.
 
-A troca de identidade da extensão é medida excepcional, pois afeta o acesso aos cálculos armazenados localmente.
+## 16. Rotação da chave da extensão
+
+Rotacionar a PEM muda a identidade calculada da extensão. Portanto não é uma atualização normal.
+
+Em caso de comprometimento da PEM:
+
+- suspenda a distribuição;
+- preserve evidências;
+- trate como incidente de identidade;
+- avalie estratégia de migração de dados;
+- não gere uma nova chave e publique silenciosamente como se fosse atualização comum.
