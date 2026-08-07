@@ -1,6 +1,17 @@
 # Pacote v1.0.1-pilot.1
 
-Esta pasta contém os binários versionados da Entrega 1.0.1 e seus hashes.
+Esta é a pasta versionada dos artefatos da Entrega 1.0.1. Os executáveis são rastreados por Git LFS e cada um deve estar acompanhado de seu `.sha256`.
+
+## Conteúdo obrigatório
+
+```text
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256
+```
+
+Se algum `.exe` não aparecer nesta pasta, o pacote remoto está incompleto e não deve ser usado como fonte de instalação.
 
 ## Qual instalador usar
 
@@ -15,8 +26,6 @@ Sempre valide o `.sha256` de mesmo nome antes de executar.
 
 ## Documentação oficial
 
-Não duplique procedimentos nesta pasta. Use a documentação única do repositório:
-
 - [Instalação corporativa](../../docs/instalacao/CORPORATIVO.md)
 - [Homologação local](../../docs/instalacao/HOMOLOGACAO-LOCAL.md)
 - [Distribuição AD/GPO](../../docs/instalacao/AD-GPO.md)
@@ -26,8 +35,8 @@ Não duplique procedimentos nesta pasta. Use a documentação única do reposit�
 - [Motor editorial](../../docs/motor/ESPECIFICACAO.md)
 - [Qualidade/homologação](../../docs/qualidade/HOMOLOGACAO.md)
 
+Não duplique a documentação nesta pasta: os links acima são a fonte canônica.
+
 ## Segurança
 
-Não coloque nesta pasta PEM/PFX/chaves privadas, credenciais, documentos de produção ou cópia do IndexedDB.
-
-Os `.exe` devem ser rastreados via Git LFS e também publicados como ativos da Release correspondente.
+Não coloque aqui PEM/PFX/chaves privadas, credenciais, documentos de produção ou cópia do IndexedDB.
