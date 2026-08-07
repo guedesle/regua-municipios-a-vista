@@ -123,7 +123,17 @@ Cuidados operacionais:
 | entender a extensão MV3 e suas permissões | [11 — Especificação técnica da extensão](docs/11-ESPECIFICACAO-TECNICA-EXTENSAO.md) |
 | distribuir via AD/GPO | [12 — Distribuição corporativa AD/GPO](docs/12-DISTRIBUICAO-CORPORATIVA-AD-GPO.md) |
 | planejar atualização e continuidade | [13 — Atualização e continuidade](docs/13-ATUALIZACAO-E-CONTINUIDADE.md) |
+| revisar permissões e controles de segurança | [14 — Matriz de permissões e controles](docs/14-MATRIZ-DE-PERMISSOES-E-CONTROLES.md) |
+| tratar assinatura e custódia de chaves | [15 — Assinatura e custódia de chaves](docs/15-ASSINATURA-E-CUSTODIA-DE-CHAVES.md) |
 | segurança da distribuição | [SECURITY.md](SECURITY.md) |
+
+## Scripts corporativos
+
+| Script | Uso |
+|---|---|
+| `scripts/Publicar-Release.ps1` | publica os dois instaladores e baixa novamente os ativos para validar os hashes |
+| `scripts/Validar-Release-Publicada.ps1` | audita os quatro ativos já publicados |
+| `scripts/Instalar-Corporativo-GPO.ps1` | instala o pacote corporativo via Startup Script/GPO com validação de AD, hash, versão e Helper |
 
 ## Políticas e caminhos principais
 
