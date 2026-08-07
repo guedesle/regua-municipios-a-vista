@@ -1,100 +1,136 @@
 # Entrega 1 — Piloto operacional 1.0.1
 
-Distribuição homologada da **Régua Editorial SieDOE — Municípios à Vista**.
+Pré-release interna da **Régua Editorial SieDOE — Municípios à Vista** para implantação controlada.
 
-## Alteração desta revisão
+## Versões
 
-A extensão passa para a versão `0.7.4`, com regras editoriais `municipios-editorial-rules@1.3.0`.
+| Componente | Versão |
+|---|---|
+| Setup | `1.0.1` |
+| Extensão Chrome | `0.7.4` |
+| Regras editoriais | `municipios-editorial-rules@1.3.0` |
+| Native Helper | `0.1.4` |
+| Contrato Native Messaging | `1.2.0` |
+| IndexedDB/schema | `3` |
+| Canal | `pilot` |
+
+```text
+Extension ID: chdfbekdjpecdajbpdelmhpemenoelmd
+Native host:  com.egba.regua_editorial.helper
+```
+
+## Alteração editorial da 0.7.4
 
 - conteúdo base: Arial 6 pt / entrelinha 8 pt;
 - negrito secundário: Arial Bold 6 pt / entrelinha 8 pt;
 - trecho canônico: Arial Bold 8 pt / entrelinha 8 pt / caixa alta;
 - vazio interno normalizado: 8 pt;
-- tarja: inalterada;
+- tarja: regra preservada;
 - tarifa e fórmula de cálculo: inalteradas.
 
-A mudança de entrelinha altera a geometria editorial. Altura, cm/cl e valor total podem variar em relação à versão 0.7.3 exclusivamente por esse efeito geométrico.
+A mudança de entrelinha pode alterar a geometria do documento e, consequentemente, altura/cm-cl e valor quando a ocupação final se modificar.
 
-## Instaladores disponíveis
+## Ativos da Release
 
-Esta pré-release publica **dois instaladores explicitamente identificados no nome**.
-
-### 1. Instalação corporativa
+### Instalação corporativa
 
 ```text
 ReguaEditorial-Entrega1-Corporativo-x64.exe
 ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256
 ```
 
-Use este instalador nas estações corporativas gerenciadas. Ele mantém o gate de gerenciamento e exige que a estação seja reconhecida por um dos mecanismos corporativos aceitos, incluindo Active Directory.
+Uso: estações corporativas do Active Directory.
 
-### 2. Homologação local
+Requisito desta entrega:
+
+```text
+Win32_ComputerSystem.PartOfDomain = True
+```
+
+### Homologação local
 
 ```text
 ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
 ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256
 ```
 
-Use este instalador somente para homologação e testes em estação fora do ambiente corporativo gerenciado. Ele ignora exclusivamente o gate de AD/gerenciamento corporativo durante a instalação local.
+Uso: laboratório fora do domínio.
 
-Continuam obrigatórias neste instalador de homologação:
+Esse instalador ignora exclusivamente o gate de gerenciamento/AD. Continuam obrigatórios:
 
-- integridade por SHA-256;
-- assinaturas dos componentes;
-- validação de versão;
-- instalação e probe do Native Helper;
-- aplicação da política da extensão no Chrome;
-- validações de arquitetura e payload;
-- Extension ID operacional definitivo.
+- SHA-256;
+- validação de assinatura dos componentes;
+- versão e identidade;
+- arquitetura x64;
+- Native Helper;
+- políticas Chrome;
+- Extension ID operacional.
 
-O instalador de homologação local **não substitui** o instalador corporativo para implantação institucional.
+> [!WARNING]
+> O artefato de homologação local não substitui o instalador corporativo para rollout institucional.
+
+## Correções da cadeia de instalação
+
+A linha 1.0.1 inclui correções no empacotamento e no fluxo de instalação identificadas durante a homologação do Setup:
+
+- sincronização dos metadados internos com extensão `0.7.4`;
+- correção da chamada NSIS → Windows PowerShell para parâmetros booleanos;
+- tratamento correto do modo de homologação local em todos os gates de política;
+- normalização de scripts runtime para UTF-8 com BOM, evitando mojibake no Windows PowerShell 5.1;
+- separação física dos builds corporativo e de homologação local;
+- QA conjunto dos dois artefatos;
+- validação de que os dois instaladores são distintos.
 
 ## Instalação resumida
 
-1. escolha o instalador adequado ao tipo de estação;
-2. baixe o `.exe` e o `.sha256` de mesmo nome;
+1. escolha o instalador correto;
+2. baixe `.exe` e `.sha256` de mesmo nome;
 3. valide o SHA-256;
 4. feche completamente o Chrome;
-5. execute o instalador como administrador;
+5. execute como administrador;
 6. reabra o Chrome;
-7. confirme a extensão e a versão instalada;
-8. execute a validação funcional pós-instalação.
+7. recarregue `chrome://policy`;
+8. confirme a extensão em `chrome://extensions`;
+9. execute a homologação funcional.
 
 ## Requisitos comuns
 
 - Windows x64;
 - Google Chrome;
-- credencial administrativa durante a instalação;
-- Microsoft Word desktop somente para conversão automática de DOC e RTF.
+- privilégio administrativo durante a instalação;
+- Word desktop somente para DOC/RTF.
 
-DOCX, cálculos, consultas e relatórios não dependem do Word.
-
-O instalador **corporativo** requer ainda ambiente corporativo gerenciado. O instalador de **homologação local** existe justamente para estações de teste que não atendam a esse gate.
+O Helper é self-contained; não é necessário instalar .NET Runtime separadamente.
 
 ## Assinatura do piloto
 
 > [!WARNING]
-> Os instaladores desta pré-release utilizam certificado temporário de laboratório. O primeiro aviso do Windows pode apresentar **Editor desconhecido** até o certificado ser confiado na estação. Execute somente depois de validar o SHA-256 e confirmar a origem da Release.
+> A pré-release utiliza certificado temporário de laboratório. O primeiro UAC pode apresentar **Editor desconhecido** antes que o certificado público do pacote seja confiado. Execute somente após validar SHA-256 e origem.
 
-A distribuição estável continua dependente de assinatura corporativa reconhecida.
+O canal `stable` depende de assinatura corporativa reconhecida.
 
-## Versões
+## Gate de publicação
 
-| Componente | Versão |
-|---|---|
-| Instalador | `1.0.1` |
-| Extensão do Chrome | `0.7.4` |
-| Regras editoriais | `municipios-editorial-rules@1.3.0` |
-| Programa auxiliar do Windows | `0.1.4` |
-| Comunicação local | `1.2.0` |
-| Estrutura do armazenamento local | `3` |
-| Canal | `pilot` |
+Os binários finais só devem ser anexados depois de:
 
 ```text
-ID operacional da extensão: chdfbekdjpecdajbpdelmhpemenoelmd
-Programa auxiliar: com.egba.regua_editorial.helper
+BOTH_INSTALLERS_READY
+BOTH_ARTIFACTS_QA_PASSED
 ```
+
+Após o upload, faça novo download dos quatro ativos e confira novamente os hashes antes de registrar o inventário como encerrado.
+
+## Documentação corporativa
+
+- [Guia de instalação](docs/01-GUIA-DE-INSTALACAO.md)
+- [Guia de homologação](docs/02-GUIA-DE-HOMOLOGACAO.md)
+- [Arquitetura de distribuição](docs/05-ARQUITETURA-DE-DISTRIBUICAO.md)
+- [Referência técnica](docs/09-REFERENCIA-TECNICA.md)
+- [Especificação técnica da extensão](docs/11-ESPECIFICACAO-TECNICA-EXTENSAO.md)
+- [Distribuição corporativa AD/GPO](docs/12-DISTRIBUICAO-CORPORATIVA-AD-GPO.md)
+- [Atualização e continuidade](docs/13-ATUALIZACAO-E-CONTINUIDADE.md)
+- [Política de segurança](SECURITY.md)
 
 ## Situação
 
-A mudança editorial da versão 0.7.4 foi homologada em 07/08/2026. Esta Release permanece classificada como **pré-release de piloto interno**.
+A mudança editorial 0.7.4 foi homologada em 07/08/2026. A publicação dos Setups permanece classificada como **pré-release de piloto interno**, sujeita ao gate de artefatos e à homologação técnica do pacote final.
