@@ -1,6 +1,6 @@
 # Documentação — Régua Editorial SieDOE
 
-Use esta página como índice. Se você chegou ao repositório para instalar ou orientar um usuário, não é necessário ler toda a documentação técnica.
+Use esta página como índice. Para instalar ou orientar um usuário, não é necessário ler toda a documentação técnica.
 
 ## Escolha o que precisa fazer
 
@@ -13,7 +13,8 @@ Use esta página como índice. Se você chegou ao repositório para instalar ou 
 | Resolver uma falha | [Suporte e diagnóstico](uso/SUPORTE.md) |
 | Entender arquitetura e segurança | [Referência técnica](tecnico/README.md) |
 | Consultar as regras do motor editorial | [Especificação do motor de transformação](motor/ESPECIFICACAO.md) |
-| Homologar uma instalação ou release | [Qualidade e homologação](qualidade/HOMOLOGACAO.md) |
+| Homologar instalação ou release | [Qualidade e homologação](qualidade/HOMOLOGACAO.md) |
+| Auditar a organização deste repositório | [Revisão de QA](qualidade/REVISAO-REPOSITORIO.md) |
 
 ## Baseline desta distribuição
 
@@ -28,7 +29,7 @@ Use esta página como índice. Se você chegou ao repositório para instalar ou 
 | IndexedDB | schema `3` |
 | Extension ID | `chdfbekdjpecdajbpdelmhpemenoelmd` |
 
-## Estrutura da documentação
+## Estrutura
 
 ```text
 docs/
@@ -36,7 +37,7 @@ docs/
 ├── uso/          # operar e suportar
 ├── tecnico/      # arquitetura, extensão, segurança e atualização
 ├── motor/        # regras de transformação editorial
-└── qualidade/    # homologação e critérios de aceite
+└── qualidade/    # homologação e QA
 ```
 
-A documentação histórica removida da árvore ativa continua disponível no histórico Git. Isso evita que instruções antigas concorram com a baseline atual.
+A documentação histórica removida da árvore ativa continua disponível no histórico Git. Assim, instruções antigas não concorrem com a baseline atual.
