@@ -1,107 +1,141 @@
-# Checklist de entrega — Entrega 1
+# Checklist de entrega — Entrega 1.0.1
 
-Use este checklist para registrar a publicação, a instalação, a homologação e a orientação ao usuário.
+Use este checklist para registrar build, QA, publicação, implantação, homologação e orientação ao usuário.
 
-## 1. Publicação da Release
+## 1. Gate de build e QA
 
-- [ ] Release privada `v1.0.0-pilot.1` publicada;
-- [ ] `ReguaEditorial-Entrega1-Setup-x64.exe` anexado;
-- [ ] `ReguaEditorial-Entrega1-Setup-x64.exe.sha256` anexado;
-- [ ] SHA-256 conferido depois de baixar novamente os arquivos;
-- [ ] tamanho e hash registrados no inventário;
-- [ ] instalador não foi commitado na árvore Git;
-- [ ] chave privada ausente do repositório e da Release;
-- [ ] pacote anterior preservado para recuperação;
+- [ ] build gerou os dois instaladores;
+- [ ] `BOTH_INSTALLERS_READY` registrado;
+- [ ] QA conjunto executado;
+- [ ] `BOTH_ARTIFACTS_QA_PASSED` registrado;
+- [ ] instaladores têm SHA-256 diferentes;
+- [ ] runtime scripts do pacote estão compatíveis com Windows PowerShell 5.1/UTF-8;
+- [ ] artefato de homologação local contém override de gerenciamento;
+- [ ] artefato corporativo não contém bypass do gate AD;
+- [ ] Extension ID validado como `chdfbekdjpecdajbpdelmhpemenoelmd`.
+
+## 2. Publicação da Release
+
+- [ ] Release privada `v1.0.1-pilot.1` criada/atualizada;
+- [ ] `ReguaEditorial-Entrega1-Corporativo-x64.exe` anexado;
+- [ ] `ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256` anexado;
+- [ ] `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` anexado;
+- [ ] `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe.sha256` anexado;
+- [ ] hashes conferidos após novo download;
+- [ ] tamanho dos dois executáveis registrado;
+- [ ] código-fonte e staging não foram anexados;
+- [ ] PEM/PFX/chaves privadas ausentes;
+- [ ] pacote anterior preservado;
 - [ ] responsável e data da publicação registrados.
 
-## 2. Identificação da versão
+## 3. Identificação da versão
 
-- [ ] instalador `1.0.0`;
-- [ ] extensão `0.7.3`;
-- [ ] programa auxiliar `0.1.4`;
-- [ ] comunicação local `1.2.0`;
+- [ ] Setup `1.0.1`;
+- [ ] extensão `0.7.4`;
+- [ ] regras `municipios-editorial-rules@1.3.0`;
+- [ ] Helper `0.1.4`;
+- [ ] Native Messaging `1.2.0`;
+- [ ] IndexedDB/schema `3`;
 - [ ] ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
+- [ ] native host `com.egba.regua_editorial.helper`;
 - [ ] canal `pilot`.
 
-## 3. Preparação da estação
+## 4. Preparação da estação corporativa
 
 - [ ] Windows x64;
-- [ ] Google Chrome instalado;
-- [ ] estação vinculada ao domínio corporativo;
-- [ ] credencial administrativa disponível;
-- [ ] perfil do Chrome que será usado pelo operador identificado;
-- [ ] Word instalado quando DOC ou RTF fizerem parte do uso previsto;
-- [ ] dados ou versão anterior avaliados antes da instalação.
+- [ ] Chrome instalado;
+- [ ] `PartOfDomain = True`;
+- [ ] credencial administrativa ou execução como SYSTEM;
+- [ ] perfil Chrome operacional identificado;
+- [ ] Word instalado quando DOC/RTF forem necessários;
+- [ ] dados anteriores avaliados antes da atualização;
+- [ ] extensão descompactada de desenvolvimento removida/desativada no perfil de teste.
 
-## 4. Instalação
+## 5. Instalação corporativa
 
-- [ ] SHA-256 validado na estação;
-- [ ] aviso de certificado temporário comunicado à TI;
-- [ ] Chrome completamente fechado;
-- [ ] instalador executado como administrador;
+- [ ] SHA-256 validado;
+- [ ] Chrome fechado;
+- [ ] instalador **Corporativo** executado como administrador;
 - [ ] instalação concluída sem erro;
-- [ ] políticas recarregadas em `chrome://policy`;
+- [ ] `installation.json` criado;
+- [ ] `chrome-policy.json` criado;
+- [ ] Helper presente em Program Files;
+- [ ] `chrome://policy` recarregado;
 - [ ] extensão visível em `chrome://extensions`;
 - [ ] nome, versão e ID conferidos;
-- [ ] extensão indicada como gerenciada pela organização;
-- [ ] diagnóstico do programa auxiliar aprovado.
+- [ ] extensão indicada como gerenciada;
+- [ ] probe do Helper aprovado.
 
-## 5. Teste funcional
+## 6. Homologação local fora do domínio
 
-- [ ] matéria de teste identificada corretamente;
+- [ ] estação deliberadamente fora do AD;
+- [ ] instalador **HomologacaoLocal** utilizado;
+- [ ] override local registrado no estado;
+- [ ] políticas Chrome aplicadas;
+- [ ] extensão instalada com o mesmo ID operacional;
+- [ ] Helper e fluxo funcional aprovados;
+- [ ] artefato local não foi confundido com o corporativo.
+
+## 7. Teste funcional
+
+- [ ] página compatível reconhecida;
+- [ ] side panel abre;
 - [ ] DOCX processado;
 - [ ] prévia conferida;
+- [ ] regras editoriais 1.3.0 verificadas;
 - [ ] medição conferida;
 - [ ] preço conferido;
-- [ ] cálculo salvo e localizado;
+- [ ] cálculo salvo;
+- [ ] registro localizado por consulta;
 - [ ] relatório por data gerado;
 - [ ] relatório por intervalo gerado;
-- [ ] CSV exportado e aberto em planilha;
-- [ ] JSON exportado e validado;
-- [ ] registros preservados após fechar e reabrir o Chrome;
+- [ ] CSV exportado;
+- [ ] JSON exportado;
+- [ ] registros preservados após reinício do Chrome;
 - [ ] DOC testado quando aplicável;
 - [ ] RTF testado quando aplicável.
 
-## 6. Manutenção
+## 8. Manutenção e rollback
 
-- [ ] reparo testado sem trocar o ID da extensão;
-- [ ] reparo preservou os cálculos locais;
-- [ ] remoção padrão retirou o programa auxiliar e preservou extensão e dados;
-- [ ] procedimento de remoção integral conhecido;
-- [ ] plano de reversão disponível;
-- [ ] pacote anterior disponível;
-- [ ] responsável pelo suporte definido;
-- [ ] local dos logs conhecido pela TI.
+- [ ] reparo testado sem trocar Extension ID;
+- [ ] reparo preservou IndexedDB;
+- [ ] remoção padrão validada;
+- [ ] remoção integral documentada e protegida por confirmação;
+- [ ] versão anterior disponível;
+- [ ] plano de rollback disponível;
+- [ ] logs e estados conhecidos pela TI;
+- [ ] processo de migração futura para HTTPS documentado.
 
-## 7. Orientação ao usuário
+## 9. Segurança
+
+- [ ] repositório e Release privados;
+- [ ] nenhum segredo versionado;
+- [ ] nenhuma chave privada anexada;
+- [ ] nenhum documento de produção anexado;
+- [ ] evidências sanitizadas;
+- [ ] hashes arquivados;
+- [ ] certificado temporário identificado pelo manifesto/thumbprint;
+- [ ] plano de assinatura corporativa registrado para `stable`;
+- [ ] Native Messaging restrito ao Extension ID operacional;
+- [ ] host permission da extensão restrito ao EGBANET.
+
+## 10. Orientação ao usuário
 
 - [ ] usuário recebeu o [Guia rápido de uso](08-GUIA-RAPIDO-DE-USO.md);
 - [ ] usuário sabe abrir a matéria antes da extensão;
-- [ ] usuário sabe diferenciar os fluxos DOCX, DOC e RTF;
-- [ ] usuário sabe revisar prévia, medição e valor;
-- [ ] usuário sabe consultar cálculos e emitir relatórios;
-- [ ] usuário foi orientado a usar o mesmo perfil do Chrome;
-- [ ] usuário foi orientado a não limpar dados do navegador;
-- [ ] usuário sabe quais informações registrar em caso de falha.
+- [ ] usuário conhece os fluxos DOCX/DOC/RTF;
+- [ ] usuário revisa prévia, medição e preço;
+- [ ] usuário sabe consultar/exportar registros;
+- [ ] usuário foi orientado a usar o mesmo perfil Chrome;
+- [ ] usuário foi orientado a não limpar dados do navegador sem procedimento;
+- [ ] usuário sabe registrar mensagens de erro sem enviar conteúdo de produção.
 
-## 8. Segurança
-
-- [ ] acesso ao repositório restrito;
-- [ ] Release privada;
-- [ ] nenhuma credencial, senha, cookie ou token anexado;
-- [ ] nenhum documento de produção anexado;
-- [ ] nenhuma chave privada versionada;
-- [ ] evidências sem conteúdo sensível;
-- [ ] SHA-256 arquivado com a entrega;
-- [ ] certificado temporário identificado pelo thumbprint;
-- [ ] plano para assinatura corporativa registrado antes do canal estável.
-
-## 9. Aceite
+## 11. Aceite
 
 - [ ] testes obrigatórios aprovados;
 - [ ] pendências e limitações registradas;
-- [ ] aceite funcional da GERDO;
-- [ ] aceite técnico da TI;
-- [ ] estações autorizadas registradas;
-- [ ] decisão de manter, ampliar, corrigir ou suspender o piloto registrada;
+- [ ] aceite funcional GERDO;
+- [ ] aceite técnico TI;
+- [ ] grupo/OU de piloto registrado;
+- [ ] decisão de ampliar, corrigir ou suspender registrada;
 - [ ] inventário da Release atualizado.
