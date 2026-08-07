@@ -1,12 +1,12 @@
-# Relatório de QA da documentação
+# Relatório de QA da documentação — Entrega 1.0.1
 
 ## Status
 
-**APROVADA para implantação e homologação do piloto.**
+**APROVADA como documentação técnica e operacional da pré-release 1.0.1.**
 
-Data da revisão: **1º de agosto de 2026**.
+Revisão consolidada: **7 de agosto de 2026**.
 
-A aprovação cobre clareza, navegação, consistência técnica, segurança das instruções e capacidade de onboarding da equipe de TI e dos operadores.
+A aprovação documental não substitui o QA dos binários nem a homologação das estações. Os hashes finais permanecem deliberadamente fora deste relatório até a publicação dos artefatos definitivos.
 
 ## Escopo revisado
 
@@ -14,119 +14,183 @@ A aprovação cobre clareza, navegação, consistência técnica, segurança das
 - guia de instalação;
 - guia de homologação;
 - operação e suporte;
-- plano de reversão;
+- plano de rollback;
 - arquitetura de distribuição;
 - checklist de entrega;
 - inventário da Release;
 - guia rápido de uso;
 - referência técnica;
-- política de segurança;
-- notas da Release;
-- script de publicação e sincronização da Release.
+- especificação técnica da extensão MV3;
+- distribuição corporativa AD/GPO;
+- atualização e continuidade;
+- `SECURITY.md`;
+- notas da Release `v1.0.1-pilot.1`;
+- script de publicação da Release.
 
-## Ciclos executados
+## 1. Principais mudanças desde a revisão anterior
 
-### Ciclo 1 — QA inicial
+A documentação anterior estava centrada em:
 
-Foram identificados:
+```text
+Setup 1.0.0
+Extensão 0.7.3
+Release v1.0.0-pilot.1
+um único instalador
+```
 
-- instalação pouco prioritária no README;
-- excesso de termos técnicos sem contexto;
-- ausência de guia específico para operadores;
-- falta de referência técnica consolidada;
-- abertura do painel descrita de forma vaga;
-- certificado temporário insuficientemente documentado;
-- reparo e remoção com instruções ambíguas;
-- risco de perda de cálculos pouco destacado;
-- inventário com campos pendentes sem orientação de preenchimento;
-- notas da Release não sincronizadas automaticamente;
-- substituição desnecessária de ativos ao atualizar somente a documentação.
+A revisão atual consolida:
 
-### Ciclo 2 — UX e webwriting
+```text
+Setup 1.0.1
+Extensão 0.7.4
+Regras 1.3.0
+Release v1.0.1-pilot.1
+dois instaladores
+```
 
-As informações foram reorganizadas por tarefa e público:
+## 2. Segregação dos instaladores
 
-- instalação imediata no início do README;
-- primeiro uso logo após a instalação;
-- navegação por necessidade;
-- linguagem operacional para a TI da ponta;
-- guia rápido por casos de uso;
-- termos técnicos explicados pelo papel que desempenham;
-- detalhes de arquitetura deslocados para documentos próprios;
-- alertas posicionados antes de ações de risco;
-- comandos apresentados junto ao objetivo e ao resultado esperado.
+A documentação diferencia explicitamente:
 
-### Ciclo 3 — QA técnico e de segurança
+### Corporativo
 
-A documentação foi confrontada com:
+```text
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+```
 
-- versões declaradas no projeto;
-- ID operacional da extensão;
-- endereços compatíveis do EGBANET;
-- comportamento do painel lateral do Chrome;
-- estrutura do instalador;
-- diretórios instalados;
-- políticas do Chrome;
-- diagnóstico do programa auxiliar;
-- comportamento da remoção padrão e integral;
-- certificado temporário do piloto;
-- opções oficiais do GitHub CLI usadas na publicação.
+- exige estação no Active Directory;
+- destinado ao rollout institucional.
 
-## Resultado por critério
+### Homologação local
+
+```text
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
+```
+
+- destinado a laboratório fora do AD;
+- bypass limitado ao gate de ambiente;
+- não deve ser usado como substituto institucional.
+
+## 3. Consistência técnica confrontada
+
+A revisão documental foi alinhada com os elementos atuais da implementação:
+
+- Chrome Manifest V3;
+- Extension ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
+- permissões Chrome declaradas;
+- host permission restrita ao EGBANET;
+- content scripts restritos às páginas de matéria;
+- Native Messaging `com.egba.regua_editorial.helper`;
+- Helper `0.1.4`;
+- contrato `1.2.0`;
+- instalação por máquina;
+- políticas Chrome em HKLM;
+- cache local de CRX/update.xml;
+- estado `installation.json` e `chrome-policy.json`;
+- logs em ProgramData;
+- IndexedDB/schema `3`;
+- regra explícita `PartOfDomain = True` no instalador corporativo;
+- modo de homologação local;
+- compatibilidade dos scripts runtime com Windows PowerShell 5.1/UTF-8.
+
+## 4. Resultado por critério
 
 | Critério | Resultado | Observação |
 |---|---|---|
-| Instalação localizada rapidamente | Aprovado | caminho principal visível no início do README |
-| Primeiro uso compreensível | Aprovado | abertura pelo ícone e painel lateral explicitada |
-| Separação por público | Aprovado | TI, operador, homologação e suporte possuem rotas próprias |
-| Linguagem e legibilidade | Aprovado | jargão reduzido e contextualizado |
-| Consistência de versões | Aprovado | `1.0.0`, `0.7.3`, `0.1.4`, `1.2.0` e schema `3` |
-| Identidade da extensão | Aprovado | ID operacional consistente em todos os documentos |
-| Conversão DOC/RTF | Aprovado | fluxo automático descrito com tratamento de indisponibilidade e orientação manual |
-| Preservação de dados | Aprovado | riscos por perfil, limpeza e remoção destacados |
-| Reparo e remoção | Aprovado | comportamento e comandos documentados |
-| Certificado do piloto | Aprovado | aviso, inventário, riscos e retirada controlada descritos |
-| Segurança das evidências | Aprovado | dados proibidos e sanitização definidos |
-| Navegação interna | Aprovado | arquivos de destino existentes e links relativos consistentes |
-| Notas da Release | Aprovado | links absolutos e sincronização pelo script |
-| Publicação de ativos | Aprovado | substituição exige `-ReplaceAssets`; atualização comum preserva binários |
+| versão e identidade | Aprovado | 1.0.1 / 0.7.4 / ID operacional consistente |
+| separação dos artefatos | Aprovado | nomes, finalidade e riscos documentados |
+| Manifest V3 | Aprovado | permissões, hosts e superfícies descritos |
+| Active Directory | Aprovado | requisito corporativo explicitado sem ambiguidade |
+| GPO/rollout | Aprovado | instalação silenciosa, grupos/ondas e validação descritos |
+| Native Messaging | Aprovado | host, registro, allowed origin e probe documentados |
+| Word COM | Aprovado | dependência limitada a DOC/RTF e controles descritos |
+| IndexedDB | Aprovado | riscos de perfil/limpeza/ID destacados |
+| políticas Chrome | Aprovado | chaves, finalidade e preservação de terceiros descritas |
+| assinatura e hash | Aprovado | piloto, SHA-256 e transição para stable documentados |
+| atualização | Aprovado | identidade, HTTPS futuro e rollback documentados |
+| segurança | Aprovado | materiais proibidos, evidências e resposta a incidente definidos |
+| suporte | Aprovado | caminhos, logs, probe e códigos de erro disponíveis |
+| QA de publicação | Aprovado | gate duplo e download pós-publicação descritos |
 
-## Pendências operacionais não bloqueantes
+## 5. Pontos deliberadamente não preenchidos
 
-As pendências abaixo não são falhas da documentação:
+Não foram inventados:
 
-1. preencher no inventário o SHA-256, o tamanho, o responsável, o thumbprint e os aceites reais;
-2. sincronizar as notas já publicadas na página da Release executando novamente o script;
-3. concluir a homologação em estações representativas;
-4. substituir a assinatura temporária de laboratório por assinatura corporativa reconhecida antes do canal estável;
-5. registrar qualquer diferença entre o comportamento observado e o fluxo descrito durante o piloto.
+- SHA-256 final dos Setups;
+- tamanho final dos Setups;
+- thumbprint final do build publicado;
+- estações efetivamente homologadas;
+- aceite técnico/funcional final.
 
-## Critérios para revisões futuras
+Esses valores devem ser copiados dos **artefatos definitivos**, do `release-manifest.json` e das evidências pós-publicação.
 
-Reabrir o QA documental quando houver alteração em:
+## 6. Riscos documentais controlados
 
-- versão da extensão ou do programa auxiliar;
-- ID da extensão;
-- páginas compatíveis do EGBANET;
-- fluxo de DOC, RTF ou DOCX;
-- localização dos cálculos;
-- telas, nomes de botões ou navegação;
-- políticas do Chrome;
-- processo de instalação, atualização ou remoção;
-- formato dos relatórios;
-- requisitos de segurança ou assinatura.
+### Risco: confundir HomologacaoLocal com Corporativo
+
+Controle: nome explícito, aviso no README, release notes, instalação, arquitetura, segurança e checklist.
+
+### Risco: afirmar suporte Entra-only no corporativo
+
+Controle: documentação registra que esta Release exige `PartOfDomain = True`. Outros sinais de gerenciamento são diagnósticos, não substitutos desse gate.
+
+### Risco: publicar hash de build descartado
+
+Controle: inventário proíbe reutilizar hash intermediário e exige novo download da Release.
+
+### Risco: remoção destrutiva
+
+Controle: rollback e referência técnica destacam preservação do IndexedDB e proíbem limpeza indiscriminada de políticas/perfil.
+
+## 7. Gate para encerramento da Release
+
+A documentação está pronta, mas o inventário somente pode ser fechado após:
+
+```text
+BOTH_INSTALLERS_READY
+BOTH_ARTIFACTS_QA_PASSED
+```
+
+seguido de:
+
+1. upload dos quatro ativos;
+2. novo download;
+3. validação dos dois hashes;
+4. registro de tamanhos e thumbprints;
+5. homologação técnica;
+6. aceite funcional/técnico.
+
+## 8. Critérios para reabrir o QA documental
+
+Reabrir esta revisão quando houver mudança em:
+
+- versão da extensão/Helper/Setup;
+- Extension ID ou PEM;
+- permissões Chrome;
+- host permissions;
+- páginas compatíveis;
+- Native Messaging;
+- schema IndexedDB;
+- regras editoriais;
+- fluxo DOC/RTF;
+- políticas Chrome;
+- modelo AD/GPO;
+- URLs de atualização;
+- assinatura/certificado;
+- comportamento de reparo/remoção;
+- formato de relatórios.
 
 ## Conclusão
 
-A documentação oferece um caminho contínuo entre:
+A documentação da Entrega 1.0.1 fornece uma trilha contínua para:
 
-1. entender a solução;
-2. baixar e validar o instalador;
-3. instalar e testar a estação;
-4. orientar o operador;
-5. executar os casos de uso;
-6. registrar e diagnosticar falhas;
-7. reparar, remover ou reverter com preservação de dados;
-8. auditar a composição da Release.
-
-Não foram identificadas falhas documentais bloqueantes na passagem final.
+1. identificar o artefato correto;
+2. validar integridade;
+3. instalar em domínio ou laboratório;
+4. entender a extensão e suas permissões;
+5. implantar por AD/GPO;
+6. diagnosticar políticas/Helper/Chrome;
+7. preservar dados locais;
+8. atualizar sem trocar identidade;
+9. executar rollback;
+10. auditar e fechar a Release.
