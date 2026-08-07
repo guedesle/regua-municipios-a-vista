@@ -1,73 +1,107 @@
-# Referência técnica
+# Referência técnica — Régua Editorial SieDOE 0.7.4
 
-Use este documento para suporte de segundo nível, diagnóstico, manutenção e atualização da Régua Editorial.
+Use este documento para suporte de segundo nível, diagnóstico, manutenção, atualização e auditoria técnica.
 
-## 1. Visão técnica
+## 1. Identificação
 
-| Componente | Papel na solução | Versão |
-|---|---|---|
-| Extensão do Chrome | Abre o painel lateral, lê a página da matéria, processa documentos, calcula, consulta e gera relatórios | `0.7.3` |
-| Programa auxiliar do Windows | Converte DOC e RTF com o Microsoft Word e executa operações locais autorizadas | `0.1.4` |
-| Comunicação local | Canal protegido entre a extensão e o programa auxiliar | `1.2.0` |
-| Armazenamento local | Banco interno do Chrome usado para guardar cálculos | schema `3` |
-| Instalador | Copia os componentes e configura a estação | `1.0.0` |
+| Componente | Versão / identificação |
+|---|---|
+| Setup | `1.0.1` |
+| Extensão Chrome | `0.7.4` |
+| Regras editoriais | `municipios-editorial-rules@1.3.0` |
+| Native Helper | `0.1.4` |
+| Contrato Native Messaging | `1.2.0` |
+| IndexedDB/schema | `3` |
+| Manifest | V3 |
+| Extension ID | `chdfbekdjpecdajbpdelmhpemenoelmd` |
+| Native host | `com.egba.regua_editorial.helper` |
+| Canal | `pilot` |
 
-Identificadores:
-
-```text
-ID da extensão:              chdfbekdjpecdajbpdelmhpemenoelmd
-Programa auxiliar registrado: com.egba.regua_editorial.helper
-```
-
-## 2. Páginas compatíveis
-
-O painel lateral é habilitado somente nestes padrões do EGBANET:
+## 2. Instaladores
 
 ```text
-https://egbanet.egba.ba.gov.br/admin/materias/edit/{id_materia}
-https://egbanet.egba.ba.gov.br/admin/materias/edicao_restrita/{id_materia}
+ReguaEditorial-Entrega1-Corporativo-x64.exe
+ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
 ```
 
-Em uma página compatível, clicar no ícone da extensão abre o painel lateral. Em outras páginas, a ação permanece desabilitada.
+O corporativo exige `PartOfDomain = True`. O de homologação local registra override de ambiente e existe apenas para laboratório fora do domínio.
 
-## 3. Fluxo de funcionamento
+## 3. Manifest V3
 
-```mermaid
-flowchart LR
-    A[Usuário abre a matéria no EGBANET] --> B[Extensão habilita o painel lateral]
-    B --> C[Extensão lê os dados da página]
-    C --> D{Formato do arquivo}
-    D -->|DOCX| E[Processamento direto]
-    D -->|DOC ou RTF| F[Programa auxiliar converte uma cópia com o Word]
-    E --> G[Prévia, medição e cálculo]
-    F --> G
-    G --> H[Cálculo salvo no perfil do Chrome]
-    H --> I[Consulta, relatório e exportação]
+A extensão declara:
+
+```text
+permissions:
+  sidePanel
+  activeTab
+  tabs
+  downloads
+  downloads.open
+  storage
+  nativeMessaging
+
+host_permissions:
+  https://egbanet.egba.ba.gov.br/*
 ```
 
-Se o programa auxiliar estiver indisponível, o fluxo de DOC e RTF deve apresentar diagnóstico ou orientação de conversão. DOCX não depende do Word.
+Content scripts:
 
-## 4. Diretórios instalados
+```text
+https://egbanet.egba.ba.gov.br/admin/materias/edit/*
+https://egbanet.egba.ba.gov.br/admin/materias/edicao_restrita/*
+```
+
+Arquitetura MV3:
+
+- background service worker em módulo;
+- side panel;
+- página de relatórios/opções em aba;
+- content script somente nas páginas de matéria.
+
+## 4. Diretórios
 
 ```text
 %ProgramFiles%\EGBA\ReguaEditorial\
 %ProgramFiles%\EGBA\ReguaEditorialHelper\
-%ProgramData%\EGBA\ReguaEditorial\extension-cache\
+%ProgramData%\EGBA\ReguaEditorial\extension-cache\0.7.4\
 %ProgramData%\EGBA\ReguaEditorial\state\
 %ProgramData%\EGBA\ReguaEditorial\Logs\
 ```
 
-| Diretório | Finalidade |
-|---|---|
-| `ReguaEditorial` | scripts administrativos, manifestos e desinstalador |
-| `ReguaEditorialHelper` | programa auxiliar e arquivos necessários à execução |
-| `extension-cache` | pacote local da extensão e manifesto de atualização |
-| `state` | estado usado para reparar e remover sem sobrescrever políticas alheias |
-| `Logs` | registros administrativos sanitizados |
+## 5. Arquivos de estado
 
-## 5. Políticas do Chrome
+### Instalação
 
-A instalação gerenciada usa:
+```text
+%ProgramData%\EGBA\ReguaEditorial\state\installation.json
+```
+
+Registra, entre outros:
+
+- canal;
+- update URL;
+- modo de bootstrap;
+- Extension ID e versão;
+- Helper/contrato;
+- baseline de build;
+- associação ao AD;
+- gerenciamento corporativo;
+- override de homologação local;
+- métodos de gerenciamento detectados;
+- diretório de cache;
+- Word detectado;
+- arquivos validados;
+- assinaturas.
+
+### Política Chrome
+
+```text
+%ProgramData%\EGBA\ReguaEditorial\state\chrome-policy.json
+```
+
+Registra slots usados, valores anteriores, update URL e informações necessárias a reparo/rollback.
+
+## 6. Políticas Chrome
 
 ```text
 HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist
@@ -75,33 +109,123 @@ HKLM\SOFTWARE\Policies\Google\Chrome\NativeMessagingAllowlist
 HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionSettings
 ```
 
-Funções:
+O instalador:
 
-- `ExtensionInstallForcelist`: mantém a extensão instalada;
-- `NativeMessagingAllowlist`: autoriza o programa auxiliar;
-- `ExtensionSettings`: define o modo de instalação e o endereço de atualização.
+- procura slot existente pertencente ao Extension ID;
+- caso não exista, aloca slot numerado livre;
+- preserva valores anteriores;
+- grava `installation_mode = force_installed`;
+- grava `update_url`;
+- habilita override da update URL;
+- valida a leitura após a gravação.
 
-Consulte no navegador:
+Consultar:
 
 ```text
 chrome://policy
 chrome://extensions
 ```
 
-A extensão deve aparecer com o ID esperado e como gerenciada pela organização.
+## 7. Native Messaging
 
-## 6. Diagnóstico rápido da estação
+Instalação:
 
-### Domínio corporativo
+```text
+%ProgramFiles%\EGBA\ReguaEditorialHelper\ReguaEditorial.Helper.exe
+%ProgramFiles%\EGBA\ReguaEditorialHelper\com.egba.regua_editorial.helper.json
+```
+
+Registro:
+
+```text
+HKLM\Software\Google\Chrome\NativeMessagingHosts\com.egba.regua_editorial.helper
+```
+
+O manifest do host utiliza:
+
+```json
+{
+  "name": "com.egba.regua_editorial.helper",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://chdfbekdjpecdajbpdelmhpemenoelmd/"
+  ]
+}
+```
+
+O registro é criado nas visões 32 e 64 bits.
+
+## 8. Probe do Helper
+
+```powershell
+& "$env:ProgramFiles\EGBA\ReguaEditorialHelper\ReguaEditorial.Helper.exe" `
+  --probe `
+  --workspace "$env:TEMP"
+```
+
+Esperado:
+
+```text
+helperVersion = 0.1.4
+contractVersion = 1.2.0
+workspaceWritable = true
+available = true
+```
+
+`wordDetected` e `wordVersion` dependem da estação.
+
+## 9. Word / DOC / RTF
+
+O Microsoft Word desktop é utilizado somente na conversão automática de DOC e RTF.
+
+Controles esperados:
+
+- instância própria do Word;
+- operação invisível;
+- documento aberto como somente leitura;
+- macros desabilitadas;
+- arquivo temporário controlado;
+- DOCX resultante validado;
+- temporários removidos ao final;
+- original não sobrescrito.
+
+DOCX não depende do Word.
+
+## 10. Persistência
+
+Os cálculos ficam no IndexedDB do perfil Chrome associado à extensão.
+
+Características da Entrega 1:
+
+- sem servidor de banco externo;
+- armazenamento associado ao perfil e Extension ID;
+- dados usados em consultas e relatórios;
+- CSV/JSON como exportação;
+- conteúdo documental não deve ser persistido pelo banco de cálculos.
+
+Ações de risco:
+
+- limpeza de dados do navegador;
+- troca de perfil;
+- remoção da extensão;
+- troca do Extension ID.
+
+## 11. Verificar AD
 
 ```powershell
 Get-CimInstance Win32_ComputerSystem |
   Select-Object PartOfDomain, Domain
 ```
 
-Resultado esperado: `PartOfDomain = True`.
+O instalador corporativo atual exige:
 
-### Chrome instalado
+```text
+PartOfDomain : True
+```
+
+O detector também registra Entra ID e Chrome Enterprise Core para diagnóstico, mas esses sinais não substituem o requisito explícito de AD do artefato corporativo desta Release.
+
+## 12. Verificar Chrome
 
 ```powershell
 $candidates = @(
@@ -113,194 +237,130 @@ $candidates = @(
 $candidates | Where-Object { $_ -and (Test-Path $_ -PathType Leaf) }
 ```
 
-### Programa auxiliar
+## 13. Verificar arquivos
 
 ```powershell
-& "$env:ProgramFiles\EGBA\ReguaEditorialHelper\ReguaEditorial.Helper.exe" `
-  --probe `
-  --workspace "$env:TEMP"
-```
-
-Confirme:
-
-- `helperVersion` igual a `0.1.4`;
-- `contractVersion` igual a `1.2.0`;
-- pasta temporária gravável;
-- Word detectado, quando instalado.
-
-### Arquivos instalados
-
-```powershell
-Test-Path "$env:ProgramFiles\EGBA\ReguaEditorial"
+Test-Path "$env:ProgramFiles\EGBA\ReguaEditorial\release-manifest.json"
 Test-Path "$env:ProgramFiles\EGBA\ReguaEditorialHelper\ReguaEditorial.Helper.exe"
-Test-Path "$env:ProgramData\EGBA\ReguaEditorial\extension-cache"
-Test-Path "$env:ProgramData\EGBA\ReguaEditorial\state"
-Test-Path "$env:ProgramData\EGBA\ReguaEditorial\Logs"
+Test-Path "$env:ProgramData\EGBA\ReguaEditorial\state\installation.json"
+Test-Path "$env:ProgramData\EGBA\ReguaEditorial\state\chrome-policy.json"
+Test-Path "$env:ProgramData\EGBA\ReguaEditorial\Logs\install.log"
 ```
 
-## 7. Certificado temporário do piloto
+## 14. Logs
 
-O instalador piloto usa certificado autossinado e adiciona sua parte pública aos repositórios do computador:
+```text
+%ProgramData%\EGBA\ReguaEditorial\Logs\install.log
+%ProgramData%\EGBA\ReguaEditorial\Logs\uninstall.log
+```
+
+Últimas linhas:
+
+```powershell
+Get-Content 'C:\ProgramData\EGBA\ReguaEditorial\Logs\install.log' -Tail 150
+```
+
+Os scripts runtime são empacotados em UTF-8 com BOM para compatibilidade de acentuação com Windows PowerShell 5.1.
+
+## 15. Manifesto de Release instalado
+
+```powershell
+$Manifest = Get-Content `
+  "$env:ProgramFiles\EGBA\ReguaEditorial\release-manifest.json" `
+  -Raw | ConvertFrom-Json
+
+$Manifest | Format-List
+```
+
+Use o manifesto para confirmar:
+
+- setupVersion;
+- extensionVersion;
+- extensionId;
+- baselineCommit;
+- bootstrapMode;
+- localHomologationArtifact;
+- signer;
+- certificateThumbprint;
+- certificateNotAfter;
+- signingMode.
+
+## 16. Certificado do piloto
+
+Repositórios:
 
 ```text
 Cert:\LocalMachine\Root
 Cert:\LocalMachine\TrustedPublisher
 ```
 
-O primeiro UAC pode mostrar **Editor desconhecido**, pois o certificado ainda não está confiado antes da execução inicial.
-
-Liste certificados relacionados:
+Confirme sempre pelo thumbprint registrado no manifesto final, nunca apenas pelo Subject.
 
 ```powershell
 Get-ChildItem Cert:\LocalMachine\Root, Cert:\LocalMachine\TrustedPublisher |
-  Where-Object { $_.Subject -eq 'CN=Empresa Grafica da Bahia' } |
+  Where-Object { $_.Thumbprint -eq $Manifest.certificateThumbprint } |
   Select-Object Subject, Thumbprint, NotAfter, PSParentPath
 ```
 
-Não remova certificados apenas pelo nome. Compare o thumbprint com o manifesto da instalação e confirme que nenhuma estação ativa depende dele.
+## 17. Bootstrap local
 
-A assinatura corporativa reconhecida é requisito para promover a distribuição ao canal estável.
-
-## 8. Logs e evidências
-
-Local padrão:
+O piloto standalone mantém CRX e `update.xml` em:
 
 ```text
-%ProgramData%\EGBA\ReguaEditorial\Logs\
+%ProgramData%\EGBA\ReguaEditorial\extension-cache\0.7.4\
 ```
 
-Logs permitidos:
+A política aponta para manifesto `file://` gerado a partir desse cache.
 
-- versão dos componentes;
-- resultado do diagnóstico;
-- hash do instalador;
-- código e horário do erro;
-- estado da instalação;
-- duração das operações.
+A atualização futura poderá migrar para HTTPS corporativo preservando a mesma identidade.
 
-Não coletar:
+## 18. Diagnóstico por código
 
-- conteúdo da matéria;
-- protocolo, cliente ou ID real da matéria;
-- cookies, tokens ou senhas;
-- documentos de produção;
-- conteúdo integral do armazenamento local.
-
-## 9. Armazenamento dos cálculos
-
-Os cálculos ficam no IndexedDB, o banco interno do Chrome. O armazenamento está associado ao:
-
-- perfil do usuário;
-- ID da extensão;
-- estado da extensão nesse perfil.
-
-Consequências:
-
-- outro perfil não verá os mesmos cálculos;
-- limpar dados do navegador pode remover registros;
-- trocar o ID cria outro armazenamento;
-- remover a extensão pode eliminar os dados.
-
-Antes de ação invasiva:
-
-1. exporte JSON e CSV;
-2. registre quantidade, período e totais;
-3. confirme o perfil do Chrome;
-4. obtenha autorização quando houver risco de descarte.
-
-## 10. Microsoft Word e conversão
-
-O Word é utilizado somente para DOC e RTF.
-
-Verifique:
-
-- Word desktop instalado;
-- licença ativa;
-- Word aberto manualmente ao menos uma vez no perfil do usuário;
-- ausência de caixa de diálogo pendente;
-- diagnóstico do programa auxiliar aprovado;
-- teste com arquivo sintético, sem macro.
-
-O programa auxiliar deve abrir uma cópia como somente leitura, desabilitar macros e produzir um DOCX válido. O original não deve ser substituído.
-
-Quando o painel solicitar conversão manual apesar de o programa auxiliar estar instalado, trate como possível falha de comunicação e registre a ocorrência.
-
-## 11. Reparação
-
-Antes do reparo, registre versão e quantidade de cálculos.
-
-Depois do reparo, confirme:
-
-1. diretórios instalados;
-2. políticas em `chrome://policy`;
-3. extensão em `chrome://extensions`;
-4. resposta do programa auxiliar;
-5. funcionamento de DOCX;
-6. conversão de DOC/RTF, quando aplicável;
-7. preservação dos cálculos.
-
-O reparo não deve trocar o ID nem apagar o armazenamento local.
-
-## 12. Remoção
-
-### Remoção padrão
-
-O desinstalador padrão:
-
-- remove o programa auxiliar;
-- remove sua autorização de comunicação;
-- preserva a política da extensão;
-- preserva o pacote local e os cálculos;
-- pode manter DOCX, consultas e relatórios disponíveis;
-- desabilita a conversão automática de DOC e RTF.
-
-### Remoção integral
-
-A remoção também da extensão exige a confirmação literal:
-
-```text
-EXPORTED_OR_DISCARD_AUTHORIZED
-```
-
-Use somente depois de exportar os registros ou obter autorização expressa para descarte. Consulte o [Plano de reversão](04-PLANO-DE-ROLLBACK.md).
-
-A remoção padrão não deve ser interpretada como retirada automática do certificado temporário do piloto.
-
-## 13. Atualização
-
-Toda atualização deve preservar:
-
-- a mesma chave institucional da extensão;
-- o ID `chdfbekdjpecdajbpdelmhpemenoelmd`;
-- compatibilidade entre extensão e programa auxiliar;
-- migração controlada do armazenamento;
-- versão anterior disponível para recuperação.
-
-Teste primeiro no canal piloto. A promoção para o canal estável depende de homologação e assinatura corporativa reconhecida.
-
-## 14. Sintomas e hipóteses iniciais
-
-| Sintoma ou código | Hipótese inicial |
+| Código / sintoma | Hipótese inicial |
 |---|---|
-| `ACTIVE_DIRECTORY_REQUIRED` | estação não reconhecida como vinculada ao domínio |
-| ícone desabilitado | página fora dos endereços compatíveis |
-| painel não abre em página compatível | extensão não carregada, política pendente ou service worker com falha |
-| extensão ausente | política não aplicada ou instalação incompleta |
-| ID divergente | pacote incorreto ou identidade alterada |
-| programa auxiliar não localizado | instalação incompleta ou registro local ausente |
-| Word não detectado | Word ausente, não inicializado ou indisponível no perfil |
-| conversão manual solicitada com helper instalado | possível falha na comunicação local ou fluxo incompatível |
+| `ACTIVE_DIRECTORY_REQUIRED` | pacote corporativo em máquina fora do domínio |
+| `EXTENSION_MANAGEMENT_REQUIRED` | probe de gerenciamento não aceitou o ambiente |
+| `EXTENSION_ID_DIVERGENCE` | pacote/identidade divergente |
+| `INVALID_AUTHENTICODE_SIGNATURE` | assinatura ausente/inválida ou confiança inadequada |
+| `HELPER_INSTALLATION_FAILED` | falha na instalação do Helper |
+| `HELPER_PROBE_FAILED` | Helper instalado mas incapaz de responder ao probe |
+| `CHROME_POLICY_APPLICATION_FAILED` | política não gravada/validada |
+| extensão não aparece | Chrome não reiniciado, política/cache incorreto |
 | registros ausentes | perfil diferente, limpeza de dados ou ID alterado |
-| DOCX funciona e DOC/RTF falha | problema concentrado no Word ou no programa auxiliar |
+| DOCX funciona e DOC/RTF falha | problema concentrado em Word/Helper |
 
-## 15. Identificação da Release
+## 19. Reparo
 
-```text
-Release:          v1.0.0-pilot.1
-Instalador:       1.0.0
-Extensão:         0.7.3
-Programa auxiliar: 0.1.4
-Comunicação:      1.2.0
-Schema local:     3
-Canal:            pilot
+```powershell
+& "$env:ProgramFiles\EGBA\ReguaEditorial\Repair-ReguaEditorial.ps1" `
+  -PackageRoot "$env:ProgramFiles\EGBA\ReguaEditorial"
 ```
+
+O reparo não deve trocar Extension ID nem limpar IndexedDB.
+
+## 20. Remoção
+
+### Padrão
+
+```powershell
+& "$env:ProgramFiles\EGBA\ReguaEditorial\Uninstall.exe"
+```
+
+A remoção padrão deve evitar a exclusão destrutiva do armazenamento do Chrome.
+
+### Integral
+
+Somente após exportar registros ou autorizar descarte. Consulte [04 — Plano de rollback](04-PLANO-DE-ROLLBACK.md).
+
+## 21. Atualização
+
+Preservar obrigatoriamente:
+
+- PEM institucional da extensão;
+- Extension ID;
+- compatibilidade Native Messaging;
+- migrações de IndexedDB;
+- dados locais;
+- pacote anterior para rollback.
+
+Consulte [13 — Atualização e continuidade](13-ATUALIZACAO-E-CONTINUIDADE.md).
