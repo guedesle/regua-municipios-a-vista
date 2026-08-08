@@ -7,7 +7,7 @@ Use esta página como índice. Para instalar ou orientar um usuário, não é ne
 | Objetivo | Comece aqui |
 |---|---|
 | Instalar em estação corporativa | [Instalação corporativa](instalacao/CORPORATIVO.md) |
-| Testar fora do domínio | [Homologação local](instalacao/HOMOLOGACAO-LOCAL.md) |
+| Instalar em estação fora do domínio | [Instalação local](instalacao/INSTALACAO-LOCAL.md) |
 | Implantar em várias estações / GPO | [Distribuição AD/GPO](instalacao/AD-GPO.md) |
 | Orientar o operador | [Guia rápido de uso](uso/GUIA-RAPIDO.md) |
 | Resolver uma falha | [Suporte e diagnóstico](uso/SUPORTE.md) |
@@ -33,7 +33,7 @@ Use esta página como índice. Para instalar ou orientar um usuário, não é ne
 
 ```text
 docs/
-├── instalacao/   # instalar e distribuir
+├── instalacao/   # instalação corporativa, instalação local e distribuição
 ├── uso/          # operar e suportar
 ├── tecnico/      # arquitetura, extensão, segurança e atualização
 ├── motor/        # regras de transformação editorial
