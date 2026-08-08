@@ -1,7 +1,10 @@
-# O executável deve ser publicado como ativo de Release, não commitado.
+# Executáveis são ignorados por padrão.
 *.exe
 *.msi
 *.crx
+
+# Exceção controlada: instaladores finais versionados via Git LFS.
+!distribuicao/**/*.exe
 
 # Chaves e certificados privados
 *.pem
