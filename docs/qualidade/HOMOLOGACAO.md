@@ -42,7 +42,7 @@ A publicação só é encerrada depois de novo download e validação dos hashes
 | Q-11 | DOC/RTF | conversão aprovada quando aplicável |
 | Q-12 | motor 1.3.0 | 6/8, canônico 8/8, vazio 8 pt e tarja sem regressão |
 
-## Específico do instalador Corporativo
+## Específico da Instalação corporativa
 
 ```powershell
 (Get-CimInstance Win32_ComputerSystem).PartOfDomain
@@ -50,9 +50,11 @@ A publicação só é encerrada depois de novo download e validação dos hashes
 
 Deve retornar `True`.
 
-## Específico de Homologação Local
+## Específico da Instalação local
 
-O ambiente pode estar fora do domínio, mas o Setup deve manter integridade, assinaturas, Helper, políticas e Extension ID. O estado deve registrar o override de homologação local.
+O ambiente pode estar fora do domínio, mas o Setup deve manter integridade, assinaturas, Helper, políticas e Extension ID. O estado deve registrar o override técnico usado pela modalidade local.
+
+Nesta Release, o executável da Instalação local mantém o nome técnico `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` por rastreabilidade.
 
 ## Motor editorial
 
