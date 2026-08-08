@@ -9,7 +9,7 @@ ReguaEditorial-Entrega1-Corporativo-x64.exe
 ReguaEditorial-Entrega1-Corporativo-x64.exe.sha256
 ```
 
-O instalador `HomologacaoLocal` não deve ser distribuído por GPO.
+A modalidade **Instalação local** não deve ser distribuída por GPO. Nesta Release, seu executável mantém o nome técnico `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` por rastreabilidade do artefato.
 
 ## Modelo recomendado
 
