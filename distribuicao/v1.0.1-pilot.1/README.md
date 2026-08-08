@@ -15,19 +15,19 @@ Se algum `.exe` não aparecer nesta pasta, o pacote remoto está incompleto e n�
 
 ## Qual instalador usar
 
-| Ambiente | Instalador |
-|---|---|
-| estação corporativa ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
-| laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
+| Modalidade | Ambiente | Instalador |
+|---|---|---|
+| Instalação corporativa | estação ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
+| Instalação local | estação/laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
 
 Sempre valide o `.sha256` de mesmo nome antes de executar.
 
-> `HomologacaoLocal` é somente para laboratório. Não o utilize para rollout institucional.
+> A **Instalação local** não deve ser utilizada para rollout institucional. O executável mantém `HomologacaoLocal` no nome somente por rastreabilidade desta Release.
 
 ## Documentação oficial
 
 - [Instalação corporativa](../../docs/instalacao/CORPORATIVO.md)
-- [Homologação local](../../docs/instalacao/HOMOLOGACAO-LOCAL.md)
+- [Instalação local](../../docs/instalacao/INSTALACAO-LOCAL.md)
 - [Distribuição AD/GPO](../../docs/instalacao/AD-GPO.md)
 - [Guia rápido de uso](../../docs/uso/GUIA-RAPIDO.md)
 - [Suporte](../../docs/uso/SUPORTE.md)
