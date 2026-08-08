@@ -13,7 +13,7 @@
 | Você precisa… | Abra |
 |---|---|
 | instalar em estação corporativa | [Instalação corporativa](docs/instalacao/CORPORATIVO.md) |
-| testar fora do domínio | [Homologação local](docs/instalacao/HOMOLOGACAO-LOCAL.md) |
+| instalar em estação local fora do domínio | [Instalação local](docs/instalacao/INSTALACAO-LOCAL.md) |
 | distribuir por AD/GPO | [Distribuição AD/GPO](docs/instalacao/AD-GPO.md) |
 | orientar o usuário | [Guia rápido de uso](docs/uso/GUIA-RAPIDO.md) |
 | resolver uma falha | [Suporte e diagnóstico](docs/uso/SUPORTE.md) |
@@ -25,14 +25,14 @@
 
 ## Qual instalador usar?
 
-| Ambiente | Arquivo |
-|---|---|
-| estação corporativa ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
-| laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
+| Modalidade | Ambiente | Arquivo |
+|---|---|---|
+| Instalação corporativa | estação ingressada no Active Directory | `ReguaEditorial-Entrega1-Corporativo-x64.exe` |
+| Instalação local | estação/laboratório fora do domínio | `ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe` |
 
 O pacote versionado fica em [`distribuicao/v1.0.1-pilot.1/`](distribuicao/v1.0.1-pilot.1/). Ele só deve ser usado como fonte de instalação quando os dois `.exe` e seus dois `.sha256` estiverem presentes.
 
-> Sempre valide o `.sha256` de mesmo nome. O instalador `HomologacaoLocal` não deve ser usado em rollout institucional.
+> Sempre valide o `.sha256` de mesmo nome. A **Instalação local** não deve ser usada em rollout institucional. O nome técnico do executável local permanece `HomologacaoLocal` nesta Release por rastreabilidade do artefato já gerado.
 
 ## Baseline atual
 
