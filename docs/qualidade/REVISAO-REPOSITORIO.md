@@ -6,7 +6,7 @@ Data: 07/08/2026
 
 **Arquitetura da informação: APROVADA.**
 
-**Pacote remoto: PENDENTE até os dois `.exe` aparecerem em `distribuicao/v1.0.1-pilot.1/` via Git LFS.**
+**Pacote remoto: APROVADO quanto à presença dos dois `.exe` e respectivos `.sha256` em `distribuicao/v1.0.1-pilot.1/` via Git LFS.**
 
 ## Rodadas executadas
 
@@ -20,7 +20,8 @@ Data: 07/08/2026
 | 6 | QA de duplicidade | documentos e scripts antigos removidos da árvore ativa |
 | 7 | QA de pacote | documentação duplicada retirada da pasta de binários |
 | 8 | QA de navegação | raiz, índice e pacote possuem caminhos explícitos por objetivo |
-| 9 | QA de veracidade | detectada ausência dos dois `.exe` no remoto; hashes existem |
+| 9 | QA de veracidade | ausência inicial dos `.exe` identificada e posteriormente corrigida via Git LFS |
+| 10 | QA terminológico | modalidade fora do domínio padronizada como **Instalação local** em toda a documentação ativa |
 
 ## Estrutura aprovada
 
@@ -29,6 +30,9 @@ README.md
 distribuicao/
 docs/
 ├── instalacao/
+│   ├── CORPORATIVO.md
+│   ├── INSTALACAO-LOCAL.md
+│   └── AD-GPO.md
 ├── uso/
 ├── tecnico/
 ├── motor/
@@ -44,25 +48,25 @@ SECURITY.md
 
 - um único README de entrada;
 - um documento canônico por tarefa;
-- instalação corporativa e homologação local sem ambiguidade;
+- **Instalação corporativa** e **Instalação local** sem ambiguidade;
 - guia de uso separado da infraestrutura;
 - suporte separado da operação diária;
 - detalhes técnicos em aprofundamento progressivo;
 - regras do motor editorial atuais e separadas de documentação histórica;
 - scripts organizados por implantação e publicação;
 - documentação histórica preservada apenas no Git, não concorrendo com a baseline atual;
-- Git LFS configurado para `distribuicao/**/*.exe`.
+- Git LFS configurado para `distribuicao/**/*.exe`;
+- dois executáveis presentes na pasta versionada do pacote.
 
-## Bloqueio restante
+## Nota sobre o nome técnico do artefato local
 
-A pasta remota já possui os dois `.sha256`, mas os dois executáveis ainda precisam ser enviados pelo Git LFS.
-
-O repositório só deve ser declarado **pacote completo de instalação** depois de confirmar no GitHub:
+A modalidade documental é **Instalação local**. O executável da Release `v1.0.1-pilot.1` mantém o nome técnico legado:
 
 ```text
-ReguaEditorial-Entrega1-Corporativo-x64.exe
 ReguaEditorial-Entrega1-HomologacaoLocal-x64.exe
 ```
+
+Esse nome é preservado nesta Release para manter rastreabilidade com o build já homologado. Ele não altera a nomenclatura funcional adotada na documentação.
 
 ## Reabrir esta revisão quando houver
 
